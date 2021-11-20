@@ -1,8 +1,8 @@
 import React from 'react'
-import Actor from './Actor'
+import Studio from './Studio'
 import Edit from './Edit'
 
-export default function AllActors({actors, showActorState, deleteActor, editActor}) {
+export default function AllStudios({studios, showState, deleteStudio, editStudio}) {
     return (
         <div id="table-wrapper">
             <div id="table-scroll" className={'style-8'}>
@@ -12,22 +12,22 @@ export default function AllActors({actors, showActorState, deleteActor, editActo
                         <th>Name</th>
                         <th>Title</th>
 
-                        {showActorState.editActors ? <th>Edit</th> : null}
-                        {showActorState.editActors ? <th>Del</th> : null}
+                        {showState.editStudios ? <th>Edit</th> : null}
+                        {showState.editStudios ? <th>Del</th> : null}
                     </tr>
                     </thead>
                     <tbody>
                     {
-                        showActorState.editActors ?
-                            actors.map(actor => {
+                        showState.editStudios ?
+                            studios.map(actor => {
                                 return <Edit key={actor.id} actor={actor}
-                                             deleteActor={() => deleteActor(actor.id)}
-                                             editActor={editActor}
+                                             deleteStudio={() => deleteStudio(actor.id)}
+                                             editStudio={editStudio}
                                 />
                             })
                             :
-                            actors.map(actor => {
-                                return <Actor key={actor.id} actor={actor}/>
+                            studios.map(actor => {
+                                return <Studio key={actor.id} actor={actor}/>
                             })
                     }
                     </tbody>

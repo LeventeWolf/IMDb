@@ -8,6 +8,8 @@ import {
   Home,
   Movies,
   Actors,
+  Directors,
+  Studios,
 } from "./components";
 
 ReactDOM.render(
@@ -18,6 +20,8 @@ ReactDOM.render(
       <Route path="/" element={<Home />} />
       <Route path="/movies" element={<Movies />} />
       <Route path="/actors" element={<Actors />} />
+      <Route path="/directors" element={<Directors />} />
+      <Route path="/studios" element={<Studios />} />
     </Routes>
 
 
