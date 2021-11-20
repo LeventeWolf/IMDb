@@ -64,9 +64,8 @@ function Actors() {
 
     function search(){
         const title_value = document.getElementById('search-title').value;
-        const rating_value = document.getElementById('search-rating').value;
-        const filter_method = document.getElementById('rating-search-filter').value;
-        Axios.post('http://localhost:3001/api/actors/search', {title_value, rating_value, filter_method})
+        const name_value = document.getElementById('search-actor').value;
+        Axios.post('http://localhost:3001/api/actors/search', {title_value, name_value})
             .then(response => {
                 setActors(response.data)
             });

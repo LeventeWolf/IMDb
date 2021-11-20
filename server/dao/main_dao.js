@@ -172,7 +172,51 @@ class DAO {
     }
 
     async searchActorByTitleOrActor(title_value, actor_value) {
-        
+        console.log("Search Actor:")
+        console.log("Title: " + title_value, " | Actor: " + actor_value)
+
+        let sql;
+
+        if (title_value !== undefined && (actor_value === '' || actor_value === undefined)) {
+            console.log(' Only Title');
+            sql = `
+                SELECT actor.id, actor.name, movie.title as movieTitle
+                FROM actor 
+                INNER JOIN movie 
+                ON actor.movie_id = movie.id 
+                WHERE movie.title LIKE '%${title_value}%'`;
+        } else if (title_value === '' && (actor_value !== undefined || actor_value !== '')){
+            console.log(' Only Actor');
+            sql = `
+                SELECT actor.id, actor.name, movie.title as movieTitle
+                FROM actor 
+                INNER JOIN movie 
+                ON actor.movie_id = movie.id 
+                WHERE actor.name LIKE '%${actor_value}%'`;
+        } else {
+            console.log(' Title & Actor');
+            sql = `
+                SELECT actor.id, actor.name, movie.title as movieTitle
+                FROM actor 
+                INNER JOIN movie 
+                ON actor.movie_id = movie.id 
+                WHERE movie.title LIKE '%${title_value}%'
+                  AND actor.name LIKE '%${actor_value}%'`;
+        }
+
+        let result;
+        try {
+            result = await db.pool.query(sql);
+        } catch (e) {
+            console.log(e.message)
+            result = [{}]
+        }
+
+        if (result === undefined) {
+            return {};
+        } else {
+            return result;
+        }
     }
 }
 

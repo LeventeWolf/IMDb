@@ -14,18 +14,13 @@ export default function Search({showState, search}) {
                        placeholder="" onChange={search}/>
             </div>
 
-            <div id="rating-input-group" className="input-group input-group-sm mb-3">
+            <div className="input-group input-group-sm mb-3">
                 <div className="input-group-prepend">
-                    <span className="input-group-text" id="inputGroup-sizing-sm" style={{height: "30px"}}>Rating</span>
+                    <span className="input-group-text" id="inputGroup-sizing-sm" style={{height: "30px"}}>Name</span>
                 </div>
-                <select id="rating-search-filter" onChange={search}>
-                    <option>=</option>
-                    <option>></option>
-                    <option>{'<'}</option>
-                </select>
-                <input id="search-rating" className="form-control" onChange={search}
-                       style={{flex: "none", width: "60x", height: "30px", fontSize: "13pt"}} type="text" name="title"
-                       placeholder=""/>
+                <input id="search-actor" className="form-control"
+                       style={{flex: "none", width: "390px", height: "30px", fontSize: "13pt"}} type="text" name="title"
+                       placeholder="" onChange={search}/>
             </div>
 
 

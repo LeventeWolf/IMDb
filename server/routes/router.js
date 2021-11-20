@@ -105,7 +105,7 @@ router.post("/api/actors/reset", async (req, res) => {
 
 router.post("/api/actors/search", async (req, res) => {
     const title_value = req.body.title_value;
-    const actor_value = req.body.rating_value;
+    const actor_value = req.body.name_value;
     const foundMovies = await DAO.searchActorByTitleOrActor(title_value, actor_value);
 
     return res.status(200).send(foundMovies);
