@@ -14,7 +14,7 @@ class DAO {
 
     async getAllActors() {
         const rows = await db.pool.query(`
-            SELECT actor.id, actor.name, movie.title
+            SELECT actor.id, actor.name, movie.title as movieTitle
             FROM actor 
             INNER JOIN movie 
             ON actor.movie_id = movie.id 
@@ -129,7 +129,8 @@ class DAO {
         let result;
         try {
             result = await db.pool.query(sql);
-        } catch {
+        } catch (e) {
+            console.log(e.message)
             result = [{}]
         }
 
@@ -164,6 +165,14 @@ class DAO {
             console.log('DB (movie) => INSERT INTO FAILED')
             throw e;
         }
+    }
+
+    async resetActors() {
+        
+    }
+
+    async searchActorByTitleOrActor(title_value, actor_value) {
+        
     }
 }
 

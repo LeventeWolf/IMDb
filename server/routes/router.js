@@ -3,6 +3,7 @@ const mainDAO = require("../dao/main_dao");
 const DAO = new mainDAO()
 
 
+/* Movies */
 
 router.post("/api/movies", async (req, res) => {
     const allMovies = await DAO.getAllMovie();
@@ -15,7 +16,7 @@ router.post("/api/movies/delete", async (req, res) => {
 
     await DAO.deleteMovieByID(movieID);
 
-    console.log("DB => Delete successful (ID: " + movieID + ")")
+    console.log("DB => Delete successful movie (ID: " + movieID + ")")
 
     return res.status(200).end();
 });
@@ -57,6 +58,59 @@ router.post("/api/movies/search", async (req, res) => {
 
     return res.status(200).send(foundMovies);
 });
+
+
+/* Actors */
+
+router.post("/api/actors", async (req, res) => {
+    const allMovies = await DAO.getAllActors();
+
+    return res.status(200).send(allMovies);
+});
+
+router.post("/api/actors/delete", async (req, res) => {
+    const actorID = req.body.actorID;
+
+    await DAO.deleteActorByID(actorID);
+
+    console.log("DB => Delete successful actor (ID: " + actorID + ")")
+
+    return res.status(200).end();
+});
+
+router.post("/api/actors/update", async (req, res) => {
+    const actorID = req.body.id;
+    const actorName = req.body.values.actorName;
+
+    try {
+        await DAO.updateActorByID(actorID, actorName);
+    } catch (e) {
+        console.log(e.message);
+    }
+
+
+    console.log("DB => Update successful actor (ID: " + actorName + ")")
+
+    const allMovies = await DAO.getAllActors();
+    return res.status(200).send(allMovies);
+});
+
+router.post("/api/actors/reset", async (req, res) => {
+    await DAO.resetActors();
+
+    const allActors = await DAO.getAllActors();
+
+    return res.status(200).send(allActors);
+});
+
+router.post("/api/actors/search", async (req, res) => {
+    const title_value = req.body.title_value;
+    const actor_value = req.body.rating_value;
+    const foundMovies = await DAO.searchActorByTitleOrActor(title_value, actor_value);
+
+    return res.status(200).send(foundMovies);
+});
+
 
 
 

@@ -3,7 +3,6 @@ import React from 'react'
 export default function Search({showState, search}) {
     if (!showState) return null;
 
-
     return (
         <div id={'search-container'} className="container-md border border-dark rounded bg-dark p-3">
             <div className="input-group input-group-sm mb-3">
@@ -25,7 +24,7 @@ export default function Search({showState, search}) {
                     <option>{'<'}</option>
                 </select>
                 <input id="search-rating" className="form-control" onChange={search}
-                       style={{flex: "none", width: "120px", height: "30px", fontSize: "13pt"}} type="text" name="title"
+                       style={{flex: "none", width: "60x", height: "30px", fontSize: "13pt"}} type="text" name="title"
                        placeholder=""/>
             </div>
 

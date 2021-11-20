@@ -1,70 +1,105 @@
-import React from "react";
+import React, {useState} from 'react';
+import AllActors from './AllActors';
+import Search from './Search';
+import Axios from 'axios';
 
 function Actors() {
+    const [actors, setActors] = useState([])
+    const [showActorState, setShowActorState] = useState({allActors: false, editActors: false, searchActors: false});
+
+    function handleShowAllActors(mode) {
+        if (mode === 'allActors') {
+            setShowActorState(() => {
+                return {allActors: true, editActors: false, searchActors: false}
+            });
+        }
+
+        if (mode === 'editActors') {
+            setShowActorState(() => {
+                return {allActors: false, editActors: true, searchActors: false}
+            });
+        }
+
+        Axios.post('http://localhost:3001/api/actors')
+            .then(response => {
+                setActors(response.data);
+            });
+    }
+
+    function deleteActor(id) {
+        Axios.post('http://localhost:3001/api/actors/delete', {actorID: id});
+
+        setActors(prevState => {
+            return prevState.filter(actor => {
+                return actor.id !== id
+            })
+        })
+    }
+
+    function editActor(id, values) {
+        Axios.post('http://localhost:3001/api/actors/update', {id, values})
+            .then(response => {
+                setActors(response.data)
+            })
+            .catch(response => {
+                setActors(actors)
+            })
+
+        ;
+    }
+
+    function resetActors() {
+        Axios.post('http://localhost:3001/api/actors/reset')
+            .then(response => {
+                setActors(response.data)
+            });
+    }
+
+    function handleShowSearch() {
+        setShowActorState(() => {
+            return {allActors: true, editActors: false, searchActors: !showActorState.searchActors}
+        });
+
+    }
+
+    function search(){
+        const title_value = document.getElementById('search-title').value;
+        const rating_value = document.getElementById('search-rating').value;
+        const filter_method = document.getElementById('rating-search-filter').value;
+        Axios.post('http://localhost:3001/api/actors/search', {title_value, rating_value, filter_method})
+            .then(response => {
+                setActors(response.data)
+            });
+
+    }
+
     return (
         <div id="main">
             <h1 className="">Actors</h1>
 
-            <div id="button-container" style={{width: "100%"}}>
-                <button className="btn btn-outline-info p-3 m-3">
+            <div style={{width: "100%"}}>
+                <button onClick={() => handleShowAllActors('allActors')} className="btn btn-outline-info p-3 m-3">
                     Show all Actors
                 </button>
 
-                <button className="btn btn-outline-info p-3 m-3">
+                <button onClick={() => handleShowAllActors('editActors')} className="btn btn-outline-info p-3 m-3">
                     Edit Actors
                 </button>
-                <button className="btn btn-outline-info p-3 m-3">
+                <button onClick={() => handleShowSearch()} className="btn btn-outline-info p-3 m-3">
                     Search Actors
                 </button>
 
-                <button type="button" className="btn btn-outline-danger p-3 m-3" style={{position: "relative", float: "right", marginRight: "20px"}}>
-                    Reset Movies
+                <button onClick={resetActors} className="btn btn-outline-danger p-3 m-3"
+                        style={{position: "relative", float: "right", marginRight: "20px"}}>
+                    Reset actors
                 </button>
-
-
             </div>
 
-            {/*Query Container*/}
-            <div id="query-container" className="container-md d-none border border-dark rounded bg-dark p-3">
-                <form action="javascript:void(0);">
-                    <div className="input-group input-group-sm mb-3">
-                        <div className="input-group-prepend">
-                            <span className="input-group-text" id="inputGroup-sizing-sm"
-                                  style={{height: "30px"}}>Title</span>
-                        </div>
-                        <input id="search-title" className="form-control"
-                               style={{flex: "none", width: "400px", height: "30px", fontSize: "13pt"}} type="text"
-                               name="title"
-                               placeholder=""/>
-                    </div>
+            <Search showState={showActorState.searchActors} search={search}/>
 
-                    <div id="rating-input-group" className="input-group input-group-sm mb-3">
-                        <div className="input-group-prepend">
-                            <span className="input-group-text" id="inputGroup-sizing-sm"
-                                  style={{height: "30px"}}>Rating</span>
-                        </div>
-                        <select id="rating-search-filter">
-                            <option>a</option>
-                            <option>b</option>
-                            <option>c</option>
-                        </select>
-                    </div>
-
-
-                    <button type="button" id="search-movie-btn" className="btn btn-outline-info ">
-                        Search
-                    </button>
-
-                    <button type="button" id="search-movie-btn" className="btn btn-outline-danger"
-                            style={{position: "relative", float: "right"}}
-                    >
-                        Reset results
-                    </button>
-                </form>
-
-            </div>
+            <AllActors actors={actors} deleteActor={deleteActor} editActor={editActor} showActorState={showActorState} />
         </div>
-  );
+    );
 }
 
 export default Actors;
