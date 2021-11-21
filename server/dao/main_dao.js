@@ -278,18 +278,24 @@ class DAO {
     }
 
     async getBarChartData() {
-        const sql = `Select * from movie`;
+        // language=MySQL
+        const sql = `
+            SELECT imdb_score, COUNT(imdb_score) as count
+            FROM movie
+            GROUP BY imdb_score
+            ORDER BY imdb_score DESC;
+        `;
 
-        const title = ['Bar Title', '%']
-        let result = [title, await db.pool.query(sql)];
+        const fillColor = '#19723C';
+        const result = [['Search', 'Movies']]
+        for (const element of await db.pool.query(sql)) {
+            result.push([element.imdb_score, element.count])
+        }
+        // const result = [['Search', 'Movies', '{role: \'style\'}']]
+        // for (const element of await db.pool.query(sql)) {
+        //     result.push([parseFloat(element.imdb_score), element.count, `fill-color: ${fillColor}`])
+        // }
 
-        return result ?? {};
-    }
-
-    async getXChartData() {
-        const sql = `select * from movie`;
-
-        let result = [title, await db.pool.query(sql)];
 
         return result ?? {};
     }

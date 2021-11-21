@@ -48,11 +48,11 @@ function Home() {
                 setDiagramData(prevState => {return {...prevState, pieData: response.data}})
             });
 
-        Axios.post('http://localhost:3001/api/nested-query/bar-chart-data')
-            .then(response => {diagramData.barData = response.data;});
+        Axios.post('http://localhost:3001/api/chart/bar-chart-data')
+            .then(response => {
+                setDiagramData(prevState => {return {...prevState, barData: response.data}})
+            });
 
-        Axios.post('http://localhost:3001/api/nested-query/x-chart-data')
-            .then(response => {diagramData.xData = response.data;});
     }
 
 

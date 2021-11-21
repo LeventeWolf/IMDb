@@ -5,12 +5,10 @@ import Chart from "react-google-charts";
 export default function Diagrams({diagrams, show, data}) {
     if (!show) return null;
 
-    console.log(data)
-
     return (
         <div id="diagrams-container" className={'d-flex'}>
             <Chart id={'piechart'}
-                   width={420}
+                   width={450}
                    height={300}
                    chartType="PieChart"
                    loader={<div>Loading Chart</div>}
@@ -24,7 +22,7 @@ export default function Diagrams({diagrams, show, data}) {
                            },
                            legendTextStyle: {
                                color: '#19723C',
-                               fontSize: 13
+                               fontSize: 14
                            },
                            backgroundColor: '',
                        }
@@ -32,62 +30,59 @@ export default function Diagrams({diagrams, show, data}) {
                    legendToggle
             />
 
-            <Chart id={'piechart'}
-                   width={400}
-                   height={300}
-                   chartType="PieChart"
+            <Chart
+                   width={'800px'}
+                   height={'300px'}
+                   chartType="ColumnChart"
                    loader={<div>Loading Chart</div>}
-                   data={[
-                       ['Genres', '%'],
-                       ['Drama', 10],
-                       ['Sci-Fi', 20],
-                       ['Fantasy', 30],
-                   ]}
+                   data={data.barData}
                    options={
                        {
-                           title: 'Genres Distribution',
+                           title: 'IMDb Score Distribution',
+                           backgroundColor: '',
+
                            titleTextStyle: {
                                color: '#19723C',
-                               fontSize: 18
+                               fontSize: 16
                            },
-                           legendTextStyle: {
-                               color: '#19723C',
-                               fontSize: 13
+
+                           legend: {
+                               textStyle: {
+                                   color: '#19723C',
+                                   fontSize: 13
+                               },
+
+                               position: 'none'
                            },
-                           backgroundColor: '',
+
+                           hAxis: {
+                               title: 'Score',
+                               titleTextStyle: {
+                                   color: '#19723C',
+                                   fontSize: 14
+                               },
+                               textStyle: {
+                                   color: '#19723C',
+                                   fontSize: 13
+                               }
+                           },
+
+                           vAxis: {
+                               title: 'Number of Movies',
+                               titleTextStyle: {
+                                   color: '#19723C',
+                                   fontSize: 14
+                               },
+
+                               textStyle: {
+                                   color: '#19723C',
+                                   fontSize: 13,
+                               }
+                           },
+
                        }
                    }
-                   legendToggle
             />
-
-            <Chart id={'piechart'}
-                   width={400}
-                   height={300}
-                   chartType="PieChart"
-                   loader={<div>Loading Chart</div>}
-                   data={[
-                       ['Genres', '%'],
-                       ['Drama', 10],
-                       ['Sci-Fi', 20],
-                       ['Fantasy', 30],
-                   ]}
-                   options={
-                       {
-                           title: 'Genres Distribution',
-                           titleTextStyle: {
-                               color: '#19723C',
-                               fontSize: 18
-                           },
-                           legendTextStyle: {
-                               color: '#19723C',
-                               fontSize: 13
-                           },
-                           backgroundColor: '',
-                       }
-                   }
-                   legendToggle
-            />
-
 
 
         </div>
