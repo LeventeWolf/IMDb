@@ -5,6 +5,9 @@ import Chart from "react-google-charts";
 export default function Diagrams({diagrams, show, data}) {
     if (!show) return null;
 
+    const barDataTicks = []
+    for (let i = 1; i < data.barData.length; i++) {barDataTicks.push(data.barData[i][0])}
+
     return (
         <div id="diagrams-container" className={'d-flex'}>
             <Chart id={'piechart'}
@@ -31,57 +34,59 @@ export default function Diagrams({diagrams, show, data}) {
             />
 
             <Chart
-                   width={'800px'}
-                   height={'300px'}
-                   chartType="ColumnChart"
-                   loader={<div>Loading Chart</div>}
-                   data={data.barData}
-                   options={
-                       {
-                           title: 'IMDb Score Distribution',
-                           backgroundColor: '',
+                width={'800px'}
+                height={'300px'}
+                chartType="ColumnChart"
+                loader={<div>Loading Chart</div>}
+                data={data.barData}
+                options={
+                    {
+                        title: 'IMDb Score Distribution',
+                        backgroundColor: '',
 
-                           titleTextStyle: {
-                               color: '#19723C',
-                               fontSize: 16
-                           },
+                        titleTextStyle: {
+                            color: '#19723C',
+                            fontSize: 16
+                        },
 
-                           legend: {
-                               textStyle: {
-                                   color: '#19723C',
-                                   fontSize: 13
-                               },
+                        legend: {
+                            textStyle: {
+                                color: '#19723C',
+                                fontSize: 13
+                            },
 
-                               position: 'none'
-                           },
+                            position: 'none'
+                        },
 
-                           hAxis: {
-                               title: 'Score',
-                               titleTextStyle: {
-                                   color: '#19723C',
-                                   fontSize: 14
-                               },
-                               textStyle: {
-                                   color: '#19723C',
-                                   fontSize: 13
-                               }
-                           },
+                        hAxis: {
+                            title: 'Score',
+                            titleTextStyle: {
+                                color: '#19723C',
+                                fontSize: 14
+                            },
+                            textStyle: {
+                                color: '#19723C',
+                                fontSize: 13
+                            },
 
-                           vAxis: {
-                               title: 'Number of Movies',
-                               titleTextStyle: {
-                                   color: '#19723C',
-                                   fontSize: 14
-                               },
+                            ticks: barDataTicks
+                        },
 
-                               textStyle: {
-                                   color: '#19723C',
-                                   fontSize: 13,
-                               }
-                           },
+                        vAxis: {
+                            title: 'Number of Movies',
+                            titleTextStyle: {
+                                color: '#19723C',
+                                fontSize: 14
+                            },
 
-                       }
-                   }
+                            textStyle: {
+                                color: '#19723C',
+                                fontSize: 13,
+                            }
+                        },
+
+                    }
+                }
             />
 
 
