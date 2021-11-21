@@ -56,7 +56,7 @@ body {
 }
 
 
-tr, th, #table-scroll, #search-container {
+tr, th, #table-scroll, #search-container, #diagrams-container {
     animation: appear 0.5s ease-in
 }
 

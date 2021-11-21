@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import Chart from "react-google-charts";
 
 
-export default function Diagrams({diagrams, show, data}) {
+export default function Diagrams({show, data}) {
     if (!show) return null;
 
     const barDataTicks = []

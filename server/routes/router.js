@@ -3,7 +3,7 @@ const mainDAO = require("../dao/main_dao");
 const DAO = new mainDAO()
 
 
-/* Movies */
+// Movies
 
 router.post("/api/movies", async (req, res) => {
     const allMovies = await DAO.getAllMovie();
@@ -60,7 +60,7 @@ router.post("/api/movies/search", async (req, res) => {
 });
 
 
-/* Actors */
+// Actors
 
 router.post("/api/actors", async (req, res) => {
     const allMovies = await DAO.getAllActors();

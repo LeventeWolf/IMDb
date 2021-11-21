@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import AllMovies from "../home/AllMovies";
 import Axios from "axios";
 import Diagrams from "./Diagrams";
@@ -6,7 +6,6 @@ import Diagrams from "./Diagrams";
 function Home() {
     const [movies, setMovies] = useState([])
     const [showState, setShowState] = useState({query_1: false, query_2: false, query_3: false});
-    const [diagram, setDiagram] = useState([]);
     const [showDiagram, setShowDiagram] = useState(false);
     const [diagramData, setDiagramData] = useState({pieData: {}, barData: {}, xData: {}})
 
@@ -52,8 +51,16 @@ function Home() {
             .then(response => {
                 setDiagramData(prevState => {return {...prevState, barData: response.data}})
             });
-
     }
+
+
+    useEffect(() => {
+        const diagrams = document.getElementById("diagrams-container");
+
+        if (diagrams) {
+            diagrams.scrollIntoView();
+        }
+    }, [showDiagram]);
 
 
     return (
@@ -93,7 +100,7 @@ function Home() {
                     Show diagrams
                 </button>
 
-                <Diagrams diagram={diagram} show={showDiagram} data={diagramData}/>
+                <Diagrams show={showDiagram} data={diagramData}/>
             </div>
         </div>
     );
