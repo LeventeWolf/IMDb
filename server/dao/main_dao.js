@@ -219,6 +219,9 @@ class DAO {
         }
     }
 
+
+    // Nested Queries
+
     async highestRatedMovies() {
         const sql = `
             SELECT *
@@ -226,7 +229,23 @@ class DAO {
             WHERE imdb_score IN (
                 SELECT max(imdb_score)
                 FROM movie
-                );
+                )
+            ORDER BY title;
+            `;
+
+        let result = await db.pool.query(sql);
+
+        return result ?? {};
+    }
+
+    async numberOfActorsPerMovie() {
+        const sql = `
+            SELECT title, imdb_score, genres, COUNT(actor.id) as "Number_of_Actors", release_date, director
+            FROM movie
+            INNER JOIN actor
+            ON movie.id = actor.movie_id
+            GROUP BY title, imdb_score
+            ORDER BY imdb_score DESC;
             `;
 
         let result = await db.pool.query(sql);

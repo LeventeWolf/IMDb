@@ -8,20 +8,25 @@ function Home() {
 
     function handleShowAllMovies(mode) {
         if (mode === 'query_1') {
+            setShowState(() => {
+                return {query_1: true, query_2: false, query_3: false}
+            });
+
             Axios.post('http://localhost:3001/api/nested-query/highest-rated-movies')
                 .then(response => {
                     setMovies(response.data);
                 });
-
-            setShowState(() => {
-                return {query_1: true, query_2: false, query_3: false}
-            });
         }
 
         if (mode === 'query_2') {
             setShowState(() => {
                 return {query_1: false, query_2: true, query_3: false}
             });
+
+            Axios.post('http://localhost:3001/api/nested-query/number-of-actors-per-movie')
+                .then(response => {
+                    setMovies(response.data);
+                });
         }
 
         if (mode === 'query_3') {
@@ -45,7 +50,7 @@ function Home() {
 
                     <button type="button" id="all-movie-btn" className="btn btn-outline-warning p-3 m-3"
                             onClick={() => handleShowAllMovies('query_2')}>
-                        Nested Query 2
+                        Number of actors / movie
                     </button>
 
                     <button type="button" id="all-movie-btn" className="btn btn-outline-warning p-3 m-3"

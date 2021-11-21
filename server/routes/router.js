@@ -120,6 +120,12 @@ router.post("/api/nested-query/highest-rated-movies", async (req, res) => {
     return res.status(200).send(result);
 });
 
+router.post("/api/nested-query/number-of-actors-per-movie", async (req, res) => {
+    const result = await DAO.numberOfActorsPerMovie();
+
+    return res.status(200).send(result);
+});
+
 
 
 module.exports = router;
