@@ -218,6 +218,21 @@ class DAO {
             return result;
         }
     }
+
+    async highestRatedMovies() {
+        const sql = `
+            SELECT *
+            FROM movie
+            WHERE imdb_score IN (
+                SELECT max(imdb_score)
+                FROM movie
+                );
+            `;
+
+        let result = await db.pool.query(sql);
+
+        return result ?? {};
+    }
 }
 
 module.exports = DAO

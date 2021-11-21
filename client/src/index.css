@@ -137,3 +137,10 @@ table td input[name$='release_date'] {
 #search-container {
     border-radius: 20px;
 }
+
+
+/* nested queries */
+.yellow {
+    color: #FFC107;
+
+}

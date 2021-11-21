@@ -112,6 +112,14 @@ router.post("/api/actors/search", async (req, res) => {
 });
 
 
+// Nested Queries
+
+router.post("/api/nested-query/highest-rated-movies", async (req, res) => {
+    const result = await DAO.highestRatedMovies();
+
+    return res.status(200).send(result);
+});
+
 
 
 module.exports = router;

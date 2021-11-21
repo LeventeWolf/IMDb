@@ -8,6 +8,11 @@ function Home() {
 
     function handleShowAllMovies(mode) {
         if (mode === 'query_1') {
+            Axios.post('http://localhost:3001/api/nested-query/highest-rated-movies')
+                .then(response => {
+                    setMovies(response.data);
+                });
+
             setShowState(() => {
                 return {query_1: true, query_2: false, query_3: false}
             });
@@ -24,11 +29,6 @@ function Home() {
                 return {query_1: false, query_2: false, query_3: true}
             });
         }
-
-        Axios.post('http://localhost:3001/api/movies')
-            .then(response => {
-                setMovies(response.data);
-            });
     }
 
 
