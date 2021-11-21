@@ -44,7 +44,13 @@ body {
 }
 
 #table-scroll {
-  height:600px;
+  height:400px;
+  overflow:auto;
+  margin-top:10px;
+}
+
+#table-scroll2 {
+  height: 300px !important;
   overflow:auto;
   margin-top:10px;
 }
