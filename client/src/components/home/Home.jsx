@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import AllMovies from "../movies/AllMovies";
+import AllMovies from "../home/AllMovies";
 import Axios from "axios";
 
 function Home() {

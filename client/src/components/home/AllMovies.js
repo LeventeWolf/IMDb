@@ -4,7 +4,7 @@ import Movie from './Movie'
 export default function AllMovies({movies, showStates}) {
     return (
         <div id="table-wrapper" className={'query'}>
-            <div id="table-scroll2" className={'style-8 query'}>
+            <div id="table-scroll" style={{height: "300px"}} className={'style-8 query'}>
                 <table className="table table-dark">
                     <thead>
                     <tr>
