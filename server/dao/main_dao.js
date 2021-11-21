@@ -2,6 +2,7 @@ const db = require('../config/db');
 const fs = require('fs').promises;
 
 class DAO {
+    // Movie
     async getAllMovie() {
         const rows = await db.pool.query(`
             SELECT *
@@ -12,45 +13,17 @@ class DAO {
         return rows.splice(0);
     }
 
-    async getAllActors() {
-        const rows = await db.pool.query(`
-            SELECT actor.id, actor.name, movie.title as movieTitle
-            FROM actor 
-            INNER JOIN movie 
-            ON actor.movie_id = movie.id 
-        `);
+    async addNewMovie(title, genres, score, director, year) {
+        const sql = `
+        INSERT INTO movie (title, release_date,    director,    genres,   the_movie_is, length, write_down, src, imdb_score, seen, trailer_url)
+        VALUES           ('${title}', '${year}', '${director}', '${genres}',   'a',     0,  'write_down', 'src', ${score}, 0, 'trailer')`;
 
-        return rows.splice(0);
-    }
-
-    async deleteMovieByID(id) {
-
-        await db.pool.query(`
-            DELETE FROM movie 
-            WHERE movie.id = ${id}`
-        ).catch();
-
-        console.log("DB (movie) => delete id: " + id)
-    }
-
-    async deleteActorByID(actor_id) {
-        await db.pool.query(`
-            DELETE FROM actor 
-            WHERE actor.id = ${actor_id}`
-        ).catch();
-
-        console.log("DB (actor) => delete id: " + actor_id)
-
-    }
-
-    async resetMovies() {
-        let dataSql = await fs.readFile("./database/top20.sql", "binary");
-        dataSql = dataSql.split(';\n');
-
-        await db.pool.query('DELETE FROM movie WHERE 1')
-
-        for (const sql of dataSql) {
-            await db.pool.query(sql).catch();
+        try {
+            await db.pool.query(sql);
+            console.log('DB (movie) => INSERT INTO: ' + title + " " + genres)
+        } catch (e) {
+            console.log('DB (movie) => INSERT INTO FAILED')
+            throw e;
         }
     }
 
@@ -67,6 +40,16 @@ class DAO {
         await db.pool.query(sql);
 
         console.log("DB => updated: " + title)
+    }
+
+    async deleteMovieByID(id) {
+
+        await db.pool.query(`
+            DELETE FROM movie 
+            WHERE movie.id = ${id}`
+        ).catch();
+
+        console.log("DB (movie) => delete id: " + id)
     }
 
     async searchMovieByTitle(title) {
@@ -141,6 +124,29 @@ class DAO {
         }
     }
 
+    async resetMovies() {
+        let dataSql = await fs.readFile("./database/top20.sql", "binary");
+        dataSql = dataSql.split(';\n');
+
+        await db.pool.query('DELETE FROM movie WHERE 1')
+
+        for (const sql of dataSql) {
+            await db.pool.query(sql).catch();
+        }
+    }
+
+    // Actor
+    async getAllActors() {
+        const rows = await db.pool.query(`
+            SELECT actor.id, actor.name, movie.title as movieTitle
+            FROM actor 
+            INNER JOIN movie 
+            ON actor.movie_id = movie.id 
+        `);
+
+        return rows.splice(0);
+    }
+
     async updateActorByID(actor_id, name, title) {
         const sql = `
             UPDATE actor
@@ -152,23 +158,14 @@ class DAO {
         console.log("DB (actor) => updated: " + name)
     }
 
+    async deleteActorByID(actor_id) {
+        await db.pool.query(`
+            DELETE FROM actor 
+            WHERE actor.id = ${actor_id}`
+        ).catch();
 
-    async addNewMovie(title, genres, score, director, year) {
-        const sql = `
-        INSERT INTO movie (title, release_date,    director,    genres,   the_movie_is, length, write_down, src, imdb_score, seen, trailer_url)
-        VALUES           ('${title}', '${year}', '${director}', '${genres}',   'a',     0,  'write_down', 'src', ${score}, 0, 'trailer')`;
+        console.log("DB (actor) => delete id: " + actor_id)
 
-        try {
-            await db.pool.query(sql);
-            console.log('DB (movie) => INSERT INTO: ' + title + " " + genres)
-        } catch (e) {
-            console.log('DB (movie) => INSERT INTO FAILED')
-            throw e;
-        }
-    }
-
-    async resetActors() {
-        
     }
 
     async searchActorByTitleOrActor(title_value, actor_value) {
@@ -185,7 +182,7 @@ class DAO {
                 INNER JOIN movie 
                 ON actor.movie_id = movie.id 
                 WHERE movie.title LIKE '%${title_value}%'`;
-        } else if (title_value === '' && (actor_value !== undefined || actor_value !== '')){
+        } else if (title_value === '' && (actor_value !== undefined || actor_value !== '')) {
             console.log(' Only Actor');
             sql = `
                 SELECT actor.id, actor.name, movie.title as movieTitle
@@ -219,6 +216,14 @@ class DAO {
         }
     }
 
+    async resetActors() {
+
+    }
+
+    // Director
+
+    // Studio
+
 
     // Nested Queries
 
@@ -249,6 +254,42 @@ class DAO {
             `;
 
         let result = await db.pool.query(sql);
+
+        return result ?? {};
+    }
+
+    // Diagrams
+
+    async getGenreChartData() {
+        // language=MySQL
+        const sql = `
+            SELECT genres, COUNT(genres) as count
+            FROM movie
+            GROUP BY genres;
+        `;
+
+        const result = [['Genres Distribution', '%']];
+
+        for (const element of await db.pool.query(sql)) {
+            result.push([element.genres, element.count])
+        }
+
+        return result ?? {};
+    }
+
+    async getBarChartData() {
+        const sql = `Select * from movie`;
+
+        const title = ['Bar Title', '%']
+        let result = [title, await db.pool.query(sql)];
+
+        return result ?? {};
+    }
+
+    async getXChartData() {
+        const sql = `select * from movie`;
+
+        let result = [title, await db.pool.query(sql)];
 
         return result ?? {};
     }

@@ -1,10 +1,14 @@
 import React, {useState} from "react";
 import AllMovies from "../home/AllMovies";
 import Axios from "axios";
+import Diagrams from "./Diagrams";
 
 function Home() {
     const [movies, setMovies] = useState([])
     const [showState, setShowState] = useState({query_1: false, query_2: false, query_3: false});
+    const [diagram, setDiagram] = useState([]);
+    const [showDiagram, setShowDiagram] = useState(false);
+    const [diagramData, setDiagramData] = useState({pieData: {}, barData: {}, xData: {}})
 
     function handleShowAllMovies(mode) {
         if (mode === 'query_1') {
@@ -36,10 +40,27 @@ function Home() {
         }
     }
 
+    function handleShowDiagram() {
+        setShowDiagram(!showDiagram);
+
+        Axios.post('http://localhost:3001/api/chart/genre-chart-data')
+            .then(response => {
+                setDiagramData(prevState => {return {...prevState, pieData: response.data}})
+            });
+
+        Axios.post('http://localhost:3001/api/nested-query/bar-chart-data')
+            .then(response => {diagramData.barData = response.data;});
+
+        Axios.post('http://localhost:3001/api/nested-query/x-chart-data')
+            .then(response => {diagramData.xData = response.data;});
+    }
+
 
     return (
         <div id="main">
             <h1>Home</h1>
+
+            {/*Nested Queries*/}
             <div id="nested-query-container" className="p-3" style={{height: "500px"}}>
                 <h3>Nested Queries</h3>
                 <div id="query-1">
@@ -64,14 +85,15 @@ function Home() {
             </div>
 
 
-
+            {/*Diagrams*/}
             <div id="diagram-container" className="p-3">
                 <h3>Diagrams</h3>
                 <button type="button" id="all-movie-btn" className="btn btn-outline-success p-3 m-3"
-                        onClick={function(){}}>
-                    Movie diagram
+                        onClick={() => handleShowDiagram()}>
+                    Show diagrams
                 </button>
 
+                <Diagrams diagram={diagram} show={showDiagram} data={diagramData}/>
             </div>
         </div>
     );

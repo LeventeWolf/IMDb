@@ -128,4 +128,29 @@ router.post("/api/nested-query/number-of-actors-per-movie", async (req, res) => 
 
 
 
+// Diagram
+
+router.post("/api/chart/genre-chart-data", async (req, res) => {
+    const result = await DAO.getGenreChartData();
+
+    console.log(result)
+
+    return res.status(200).send(result);
+});
+
+router.post("/api/chart/bar-chart-data", async (req, res) => {
+    const result = await DAO.getBarChartData();
+
+    return res.status(200).send(result);
+});
+
+router.post("/api/chart/x-chart-data", async (req, res) => {
+    const result = await DAO.getXChartData();
+
+    return res.status(200).send(result);
+});
+
+
+
+
 module.exports = router;
