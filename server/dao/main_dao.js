@@ -142,10 +142,13 @@ class DAO {
     // Actor
     async getAllActors() {
         const rows = await db.pool.query(`
-            SELECT actor.id, actor.name, movie.title as movieTitle
-            FROM actor 
-            INNER JOIN movie 
-            ON actor.movie_id = movie.id 
+            SELECT actor.name as name, movie.title as movieTitle
+            FROM actor
+            INNER JOIN cast
+            ON actor.id = cast.actor_id
+            INNER JOIN movie
+            ON cast.movie_id = movie.id
+            GROUP BY actor.name;
         `);
 
         return rows.splice(0);
@@ -225,6 +228,20 @@ class DAO {
     }
 
     // Director
+    async getAllActors() {
+        const rows = await db.pool.query(`
+            SELECT actor.name as name, movie.title as movieTitle
+            FROM actor
+            INNER JOIN cast
+            ON actor.id = cast.actor_id
+            INNER JOIN movie
+            ON cast.movie_id = movie.id
+            GROUP BY actor.name;
+        `);
+
+        return rows.splice(0);
+    }
+
 
     // Studio
 

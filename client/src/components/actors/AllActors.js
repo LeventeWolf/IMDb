@@ -10,7 +10,7 @@ export default function AllActors({actors, showActorState, deleteActor, editActo
                     <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Title</th>
+                        <th>Movie</th>
 
                         {showActorState.editActors ? <th>Edit</th> : null}
                         {showActorState.editActors ? <th>Del</th> : null}

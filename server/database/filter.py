@@ -5,17 +5,23 @@ from pandas_ods_reader import read_ods
 
 adatok = read_ods("adatok.ods", 'movie', headers=True)
 
+actors = {}
+
+person_id = 1
 
 def generate_actors():
     global out, insert, row, actors, actor
     with open('actors_insert.sql', 'w') as out:
-        insert = "INSERT INTO actor (name, age) VALUES ('{}', {});"
+        insert_to_actor = "INSERT INTO actor (id,  age) VALUES ({}, {});"
+        insert_to_person = "INSERT INTO person (id,  name) VALUES ({}, '{}');"
         for row in adatok['Actors']:
             actors = row.split(", ")
 
             for actor in actors:
-                print(insert.format(re.sub(r'[^\w]', ' ', actor), random.randint(20, 60)), file=out)
-
+                global person_id
+                print(insert_to_person.format(person_id, re.sub(r'[^\w]', ' ', actor)), file=out)
+                print(insert_to_actor.format(person_id, random.randint(20, 60)), file=out)
+                person_id += 1
 
 def generate_cast():
     global out, insert, row, actors, actor
@@ -43,16 +49,19 @@ def generate_directors():
            director_names.add(row['Director'])
 
      # generate directors (id, name)
-     id = 1
-     for director in director_names:
-        directors[director] = id
-        id += 1
 
-     insert = "INSERT INTO director (id, name) VALUES({}, '{}') ;"
+     for director in director_names:
+        global person_id
+        person_id += 1
+        directors[director] = person_id
+
+     insert_into_director = "INSERT INTO director (id, oscars) VALUES({}, {}) ;"
+     insert_into_person   = "INSERT INTO person (id, name) VALUES({}, '{}') ;"
 
      with open('directors_insert.sql', 'w') as out:
          for name, id in directors.items():
-             print(insert.format(id, name), file=out)
+             print(insert_into_person.format(id, name), file=out)
+             print(insert_into_director.format(id,  random.randint(0, 4)), file=out)
 
 studios = {}
 
@@ -93,8 +102,8 @@ def generate_movies():
 
 
 if __name__ == '__main__':
-    # generate_actors()
-    # generate_cast()
+    generate_actors()
+    generate_cast()
     generate_studios()
     generate_directors()
     generate_movies()
