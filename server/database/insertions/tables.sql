@@ -11,19 +11,24 @@ CREATE TABLE IF NOT EXISTS movie
     studio_id    INT
 );
 
+CREATE TABLE IF NOT EXISTS person (
+    id       INT            NOT NULL AUTO_INCREMENT,
+    name     VARCHAR(1000)  NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
 CREATE TABLE IF NOT EXISTS actor
 (
     id       INT            NOT NULL AUTO_INCREMENT,
-    name     VARCHAR(1000)  NOT NULL,
     age      INT            NOT NULL,
-    PRIMARY KEY (id)
+    FOREIGN KEY (id) REFERENCES person (id)
 ) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS imdb.director
 (
     id       INT           NOT NULL AUTO_INCREMENT,
-    name     VARCHAR(500)  NOT NULL,
-    PRIMARY KEY (id)
+    oscars   INT           NOT NULL,
+    FOREIGN KEY (id) REFERENCES person (id)
 ) ENGINE = InnoDB;
 
 
