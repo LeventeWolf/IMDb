@@ -1,0 +1,1 @@
+INSERT IGNORE INTO movie(title, year, imdb_score, length, seen, genres, director_id, cast_id) VALUES ();
