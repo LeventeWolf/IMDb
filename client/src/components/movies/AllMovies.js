@@ -10,11 +10,11 @@ export default function AllMovies({movies, showState, deleteMovie, editMovie}) {
                     <thead>
                     <tr>
                         <th>Title</th>
-                        <th>Genre</th>
+                        <th>Year</th>
+                        <th>Genres</th>
                         <th>Rating</th>
                         <th>Director</th>
                         <th>Studio</th>
-                        <th>Year</th>
 
                         {showState.editMovies ? <th>Edit</th> : null}
                         {showState.editMovies ? <th>Del</th> : null}

@@ -5,8 +5,12 @@ class DAO {
     // Movie
     async getAllMovie() {
         const rows = await db.pool.query(`
-            SELECT *
+            SELECT title, genres, imdb_score, director.name as director, studio.name as studio, year as release_date
             FROM movie
+            INNER JOIN director
+            ON movie.director_id = director.id
+            INNER JOIN studio
+            ON movie.studio_id = studio.id
             ORDER BY imdb_score DESC
         `);
 
