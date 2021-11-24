@@ -80,9 +80,10 @@ router.post("/api/actors/delete", async (req, res) => {
 router.post("/api/actors/update", async (req, res) => {
     const actorID = req.body.id;
     const actorName = req.body.values.actorName;
+    const actorAge = req.body.values.actorAge;
 
     try {
-        await DAO.updateActorByID(actorID, actorName);
+        await DAO.updateActorByID(actorID, actorAge, actorName);
     } catch (e) {
         console.log(e.message);
     }

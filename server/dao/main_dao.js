@@ -144,7 +144,7 @@ class DAO {
     // Actor
     async getAllActors() {
         const rows = await db.pool.query(`
-            SELECT person.id, person.name, movie.title as movieTitle
+            SELECT person.id, person.name, actor.age, movie.title as movieTitle
             FROM person
             INNER JOIN actor ON person.id = actor.id
             INNER JOIN cast ON actor.id = cast.actor_id
@@ -157,12 +157,20 @@ class DAO {
         return rows.splice(0);
     }
 
-    async updateActorByID(actor_id, name) {
+    async updateActorByID(actor_id, actor_age, name) {
+        console.log(actor_id, actor_age, name)
+
         const sql = `
             UPDATE person
             SET name = '${name}'
             WHERE id = ${actor_id}`;
 
+        const sql2 = `
+            UPDATE actor
+            SET age = '${actor_age}'
+            WHERE id = ${actor_id}`;
+
+        await db.pool.query(sql2);
         await db.pool.query(sql);
 
         console.log("DB (actor) => updated: " + name)
