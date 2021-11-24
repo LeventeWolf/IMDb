@@ -97,20 +97,26 @@ class DAO {
         if (title !== undefined && (rating == -1 || rating === undefined || rating === '')) {
             console.log(' Only Title');
             sql = `
-                SELECT *
+                SELECT movie.id, title, genres, year as release_date, imdb_score, person.name as director, studio.name as studio
                 FROM movie
+                         INNER JOIN person on movie.director_id = person.id
+                         INNER JOIN studio on movie.studio_id = studio.id
                 WHERE title LIKE '%${title}%'`;
         } else if (title === '' && rating != -1) {
             console.log(' Only Rating');
             sql = `
-                SELECT *
+                SELECT movie.id, title, genres, year as release_date, imdb_score, person.name as director, studio.name as studio
                 FROM movie
+                         INNER JOIN person on movie.director_id = person.id
+                         INNER JOIN studio on movie.studio_id = studio.id
                 WHERE imdb_score ${filter_method} ${rating}`;
         } else {
             console.log(' Title & Rating');
             sql = `
-                SELECT *
+                SELECT movie.id, title, genres, year as release_date, imdb_score, person.name as director, studio.name as studio
                 FROM movie
+                         INNER JOIN person on movie.director_id = person.id
+                         INNER JOIN studio on movie.studio_id = studio.id
                 WHERE title LIKE '%${title}%'
                   AND imdb_score ${filter_method} ${rating}`;
         }
