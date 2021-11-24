@@ -5,7 +5,7 @@ class DAO {
     // Movie
     async getAllMovie() {
         const rows = await db.pool.query(`
-            SELECT title, genres, imdb_score, person.name as director, studio.name as studio, year as release_date
+            SELECT movie.id, title, genres, imdb_score, person.name as director, studio.name as studio, year as release_date
             FROM movie
             INNER JOIN studio
             ON movie.studio_id = studio.id
@@ -144,7 +144,7 @@ class DAO {
     // Actor
     async getAllActors() {
         const rows = await db.pool.query(`
-            SELECT person.name, movie.title as movieTitle
+            SELECT person.id, person.name, movie.title as movieTitle
             FROM person
             INNER JOIN actor ON person.id = actor.id
             INNER JOIN cast ON actor.id = cast.actor_id
@@ -233,7 +233,7 @@ class DAO {
     // Director
     async getAllDirectors() {
         const rows = await db.pool.query(`
-            SELECT person.name, movie.title as movieTitle
+            SELECT person.id, person.name, movie.title as movieTitle
             FROM person
             INNER JOIN director d on person.id = d.id
             INNER JOIN movie on d.id = movie.director_id
@@ -249,7 +249,7 @@ class DAO {
 
     async getAllStudios() {
         const rows = await db.pool.query(`
-            SELECT name, movie.title as movieTitle
+            SELECT studio.id, name, movie.title as movieTitle
             FROM studio 
             INNER JOIN movie ON studio.id = studio_id
             ORDER BY name

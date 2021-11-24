@@ -85,11 +85,11 @@ table td input[name$='imdb_score'] {
 }
 
 table td input[name$='genres'] {
-    width: 100px !important;
+    width: 150px !important;
 }
 
 table td input[name$='studio'] {
-    width: 50px !important;
+    width: 200px !important;
 }
 
 table td input[name$='director'] {

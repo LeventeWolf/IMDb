@@ -31,7 +31,7 @@ router.post("/api/movies/update", async (req, res) => {
 
     console.log("Movie ID: " + movieID)
     try {
-        await DAO.updateMovieByID(movieID, title, genres, imdb_score, director, release_date);
+        await DAO.updateMovieByID(movieID, title, genres, imdb_score, release_date);
     } catch (e) {
         console.log(e.message);
     }
