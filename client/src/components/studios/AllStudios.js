@@ -19,15 +19,15 @@ export default function AllStudios({studios, showState, deleteStudio, editStudio
                     <tbody>
                     {
                         showState.editStudios ?
-                            studios.map(actor => {
-                                return <Edit key={actor.id} actor={actor}
-                                             deleteStudio={() => deleteStudio(actor.id)}
+                            studios.map(studio => {
+                                return <Edit key={studio.id} studio={studio}
+                                             deleteStudio={() => deleteStudio(studio.id)}
                                              editStudio={editStudio}
                                 />
                             })
                             :
-                            studios.map(actor => {
-                                return <Studio key={actor.id} actor={actor}/>
+                            studios.map(studio => {
+                                return <Studio key={studio.id} studio={studio}/>
                             })
                     }
                     </tbody>

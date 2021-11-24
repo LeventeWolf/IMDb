@@ -19,15 +19,15 @@ export default function AllDirectors({directors, showState, deleteDirector, edit
                     <tbody>
                     {
                         showState.editDirectors ?
-                            directors.map(actor => {
-                                return <Edit key={actor.id} actor={actor}
-                                             deleteDirector={() => deleteDirector(actor.id)}
+                            directors.map(director => {
+                                return <Edit key={director.id} director={director}
+                                             deleteDirector={() => deleteDirector(director.id)}
                                              editDirector={editDirector}
                                 />
                             })
                             :
-                            directors.map(actor => {
-                                return <Director key={actor.id} actor={actor}/>
+                            directors.map(director => {
+                                return <Director key={director.id} director={director}/>
                             })
                     }
                     </tbody>

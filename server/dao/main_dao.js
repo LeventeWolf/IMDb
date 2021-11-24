@@ -33,14 +33,14 @@ class DAO {
         }
     }
 
-    async updateMovieByID(movie_id, title, genres, score, director, release_date) {
+    async updateMovieByID(movie_id, title, genres, score, release_date) {
         const sql = `
             UPDATE movie
+
             SET title        = "${title}",
                 genres       = "${genres}",
                 imdb_score   = "${score}",
-                director     = "${director}",
-                release_date = "${release_date}"
+                year = "${release_date}"
             WHERE movie.id = ${movie_id};`;
 
         await db.pool.query(sql);
@@ -144,13 +144,14 @@ class DAO {
     // Actor
     async getAllActors() {
         const rows = await db.pool.query(`
-            SELECT actor.name as name, movie.title as movieTitle
-            FROM actor
-            INNER JOIN cast
-            ON actor.id = cast.actor_id
-            INNER JOIN movie
-            ON cast.movie_id = movie.id
-            GROUP BY actor.name;
+            SELECT person.name, movie.title as movieTitle
+            FROM person
+            INNER JOIN actor ON person.id = actor.id
+            INNER JOIN cast ON actor.id = cast.actor_id
+            INNER JOIN movie on cast.movie_id = movie.id
+            GROUP BY person.name
+            ORDER BY person.name
+            ;
         `);
 
         return rows.splice(0);
@@ -230,15 +231,14 @@ class DAO {
     }
 
     // Director
-    async getAllActors() {
+    async getAllDirectors() {
         const rows = await db.pool.query(`
-            SELECT actor.name as name, movie.title as movieTitle
-            FROM actor
-            INNER JOIN cast
-            ON actor.id = cast.actor_id
-            INNER JOIN movie
-            ON cast.movie_id = movie.id
-            GROUP BY actor.name;
+            SELECT person.name, movie.title as movieTitle
+            FROM person
+            INNER JOIN director d on person.id = d.id
+            INNER JOIN movie on d.id = movie.director_id
+            GROUP BY person.name
+            ORDER BY person.name;
         `);
 
         return rows.splice(0);
@@ -247,6 +247,17 @@ class DAO {
 
     // Studio
 
+    async getAllStudios() {
+        const rows = await db.pool.query(`
+            SELECT name, movie.title as movieTitle
+            FROM studio 
+            INNER JOIN movie ON studio.id = studio_id
+            ORDER BY name
+            ;
+        `);
+
+        return rows.splice(0);
+    }
 
     // Nested Queries
 
@@ -322,6 +333,8 @@ class DAO {
 
         return result ?? {};
     }
+
+
 }
 
 module.exports = DAO

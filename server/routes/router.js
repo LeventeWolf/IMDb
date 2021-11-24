@@ -29,6 +29,7 @@ router.post("/api/movies/update", async (req, res) => {
     const director = req.body.values.director;
     const release_date = parseInt(req.body.values.release_date);
 
+    console.log("Movie ID: " + movieID)
     try {
         await DAO.updateMovieByID(movieID, title, genres, imdb_score, director, release_date);
     } catch (e) {
@@ -95,14 +96,6 @@ router.post("/api/actors/update", async (req, res) => {
     return res.status(200).send(allMovies);
 });
 
-router.post("/api/actors/reset", async (req, res) => {
-    await DAO.resetActors();
-
-    const allActors = await DAO.getAllActors();
-
-    return res.status(200).send(allActors);
-});
-
 router.post("/api/actors/search", async (req, res) => {
     const title_value = req.body.title_value;
     const actor_value = req.body.name_value;
@@ -110,6 +103,60 @@ router.post("/api/actors/search", async (req, res) => {
 
     return res.status(200).send(foundMovies);
 });
+
+// Directors
+
+router.post("/api/directors", async (req, res) => {
+    const allMovies = await DAO.getAllDirectors();
+
+    return res.status(200).send(allMovies);
+});
+
+router.post("/api/directors/delete", async (req, res) => {
+    const directorID = req.body.directorID;
+
+    await DAO.deleteByDirector(directorID);
+
+    console.log("DB => Delete successful director (ID: " + directorID + ")")
+
+    return res.status(200).end();
+});
+
+router.post("/api/directors/update", async (req, res) => {
+    const directorID = req.body.directorID;
+    const directorName = req.body.values.directorName;
+
+    try {
+        await DAO.updateDirectorByID(directorID, directorName);
+    } catch (e) {
+        console.log(e.message);
+    }
+
+
+    console.log("DB => Update successful actor (ID: " + directorName + ")")
+
+    const allMovies = await DAO.getAllDirectors();
+    return res.status(200).send(allMovies);
+});
+
+router.post("/api/directors/search", async (req, res) => {
+    const title_value = req.body.title_value;
+    const actor_value = req.body.name_value;
+    const foundMovies = await DAO.searchDirectorByTitleOrActor(title_value, actor_value);
+
+    return res.status(200).send(foundMovies);
+});
+
+
+// Directors
+
+router.post("/api/studios", async (req, res) => {
+    const allMovies = await DAO.getAllStudios();
+
+    return res.status(200).send(allMovies);
+});
+
+
 
 
 // Nested Queries
