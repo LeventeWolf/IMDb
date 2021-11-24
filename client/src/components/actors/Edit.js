@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import editLogo from '../../media/edit.png';
 import deleteLogo from '../../media/delete.png';
+import tickLogo from '../../media/tick.png';
+
 
 export default function Edit({actor, deleteActor, editActor}) {
     const [inputMode, setInputMode] = useState(false);
@@ -22,7 +24,7 @@ export default function Edit({actor, deleteActor, editActor}) {
                 <td><input type={'text'} defaultValue={actor.name}        name={actor.id + '-name'}   />  </td>
                 <td> {actor.movieTitle} </td>
                 <td onClick={function(){changeInputMode(); editActor(actor.id, input_values(actor.id))}}>
-                    <img src={editLogo} style={{width: "20px", marginLeft: "6px"}} alt={"edit"}/></td>
+                    <img src={tickLogo} style={{width: "20px", marginLeft: "6px"}} alt={"edit"}/></td>
                 <td onClick={deleteActor}>
                     <img src={deleteLogo} style={{width: "20px", textAlign: "center"}} alt={"del"}/></td>
             </tr>

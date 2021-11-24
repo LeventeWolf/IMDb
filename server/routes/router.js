@@ -32,12 +32,10 @@ router.post("/api/movies/update", async (req, res) => {
     console.log("Movie ID: " + movieID)
     try {
         await DAO.updateMovieByID(movieID, title, genres, imdb_score, release_date);
+        console.log("DB => Update successful (ID: " + movieID + ")")
     } catch (e) {
         console.log(e.message);
     }
-
-
-    console.log("DB => Update successful (ID: " + movieID + ")")
 
     const allMovies = await DAO.getAllMovie();
     return res.status(200).send(allMovies);

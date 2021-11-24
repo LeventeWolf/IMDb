@@ -157,9 +157,9 @@ class DAO {
         return rows.splice(0);
     }
 
-    async updateActorByID(actor_id, name, title) {
+    async updateActorByID(actor_id, name) {
         const sql = `
-            UPDATE actor
+            UPDATE person
             SET name = '${name}'
             WHERE id = ${actor_id}`;
 
