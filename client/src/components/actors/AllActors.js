@@ -1,6 +1,9 @@
 import React from 'react'
 import Actor from './Actor'
 import Edit from './Edit'
+import v4 from "uuid/v4";
+const { uuid } = require('uuidv4');
+
 
 export default function AllActors({actors, showActorState, deleteActor, editActor}) {
     return (
@@ -21,14 +24,14 @@ export default function AllActors({actors, showActorState, deleteActor, editActo
                     {
                         showActorState.editActors ?
                             actors.map(actor => {
-                                return <Edit key={actor.id} actor={actor}
+                                return <Edit key={v4()} actor={actor}
                                              deleteActor={() => deleteActor(actor.id)}
                                              editActor={editActor}
                                 />
                             })
                             :
                             actors.map(actor => {
-                                return <Actor key={actor.id} actor={actor}/>
+                                return <Actor key={v4()} actor={actor}/>
                             })
                     }
                     </tbody>

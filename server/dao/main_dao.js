@@ -1,6 +1,7 @@
 const db = require('../config/db');
 const fs = require('fs').promises;
 
+
 class DAO {
     // Movie
     async getAllMovie() {
@@ -201,28 +202,32 @@ class DAO {
         if (title_value !== undefined && (actor_value === '' || actor_value === undefined)) {
             console.log(' Only Title');
             sql = `
-                SELECT actor.id, actor.name, movie.title as movieTitle
-                FROM actor 
-                INNER JOIN movie 
-                ON actor.movie_id = movie.id 
+                SELECT person.id, person.name, actor.age, movie.title as movieTitle
+                FROM person 
+                INNER JOIN actor ON actor.id = person.id
+                INNER JOIN cast ON cast.actor_id = actor.id
+                INNER JOIN movie ON cast.movie_id = movie.id
                 WHERE movie.title LIKE '%${title_value}%'`;
         } else if (title_value === '' && (actor_value !== undefined || actor_value !== '')) {
             console.log(' Only Actor');
             sql = `
-                SELECT actor.id, actor.name, movie.title as movieTitle
-                FROM actor 
-                INNER JOIN movie 
-                ON actor.movie_id = movie.id 
-                WHERE actor.name LIKE '%${actor_value}%'`;
+                SELECT person.id, person.name, actor.age, movie.title as movieTitle
+                FROM person
+                         INNER JOIN actor ON actor.id = person.id
+                         INNER JOIN cast ON cast.actor_id = actor.id
+                         INNER JOIN movie ON cast.movie_id = movie.id
+                WHERE person.name LIKE '%${actor_value}%'
+                `;
         } else {
             console.log(' Title & Actor');
             sql = `
-                SELECT actor.id, actor.name, movie.title as movieTitle
-                FROM actor 
-                INNER JOIN movie 
-                ON actor.movie_id = movie.id 
+                SELECT person.id, person.name, actor.age, movie.title as movieTitle
+                FROM person
+                         INNER JOIN actor ON actor.id = person.id
+                         INNER JOIN cast ON cast.actor_id = actor.id
+                         INNER JOIN movie ON cast.movie_id = movie.id
                 WHERE movie.title LIKE '%${title_value}%'
-                  AND actor.name LIKE '%${actor_value}%'`;
+                  AND person.name LIKE '%${actor_value}%'`;
         }
 
         let result;

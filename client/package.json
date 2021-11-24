@@ -36,5 +36,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "uuid": "^3.4.0",
+    "uuidv4": "^6.2.12"
   }
 }
