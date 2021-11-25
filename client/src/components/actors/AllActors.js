@@ -2,8 +2,6 @@ import React from 'react'
 import Actor from './Actor'
 import Edit from './Edit'
 import v4 from "uuid/v4";
-const { uuid } = require('uuidv4');
-
 
 export default function AllActors({actors, showActorState, deleteActor, editActor}) {
     return (

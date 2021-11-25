@@ -146,7 +146,7 @@ router.post("/api/directors/search", async (req, res) => {
 });
 
 
-// Directors
+// Studios
 
 router.post("/api/studios", async (req, res) => {
     const allMovies = await DAO.getAllStudios();
@@ -154,6 +154,20 @@ router.post("/api/studios", async (req, res) => {
     return res.status(200).send(allMovies);
 });
 
+router.post("/api/studios/update", async (req, res) => {
+    const studioID = req.body.id;
+    const studioName = req.body.values.studioName;
+    const location = req.body.values.location;
+
+    try {
+        await DAO.updateStudioByID(studioID, studioName, location);
+    } catch (e) {
+        console.log(e.message);
+    }
+
+    const allStudios = await DAO.getAllStudios();
+    return res.status(200).send(allStudios);
+});
 
 
 

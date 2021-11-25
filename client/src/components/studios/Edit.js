@@ -12,15 +12,16 @@ export default function Edit({studio, deleteStudio, editStudio}) {
 
     function input_values(id) {
         const studioName = document.getElementsByName(id + '-name').item(0).value;
+        const location = document.getElementsByName(id + '-location').item(0).value;
 
-        console.log(id, studioName);
-        return {id, studioName}
+        return {id, studioName, location}
     }
 
     if (inputMode){
         return (
             <tr>
                 <td><input type={'text'} defaultValue={studio.name}        name={studio.id + '-name'}   />  </td>
+                <td><input type={'text'} defaultValue={studio.location}        name={studio.id + '-location'}   />  </td>
                 <td> {studio.movieTitle} </td>
                 <td onClick={function(){changeInputMode(); editStudio(studio.id, input_values(studio.id))}}>
                     <img src={tickLogo} style={{width: "20px", marginLeft: "6px"}} alt={"edit"}/></td>
@@ -32,6 +33,7 @@ export default function Edit({studio, deleteStudio, editStudio}) {
         return (
             <tr>
                 <td>{studio.name} </td>
+                <td>{studio.location} </td>
                 <td>{studio.movieTitle}</td>
                 <td onClick={changeInputMode}>
                     <img src={editLogo} style={{width: "20px", marginLeft: "6px"}} alt={"edit"}/></td>

@@ -6,14 +6,20 @@ class DAO {
     // Movie
     async getAllMovie() {
         const rows = await db.pool.query(`
-            SELECT movie.id, title, genres, imdb_score, person.name as director, studio.name as studio, year as release_date
+            SELECT movie.id,
+                   title,
+                   genres,
+                   imdb_score,
+                   person.name as director,
+                   studio.name as studio,
+                   year        as release_date
             FROM movie
-            INNER JOIN studio
-            ON movie.studio_id = studio.id
-            INNER JOIN director ON
-            movie.director_id = director.id
-            INNER JOIN person
-            ON director.id = person.id
+                     INNER JOIN studio
+                                ON movie.studio_id = studio.id
+                     INNER JOIN director ON
+                movie.director_id = director.id
+                     INNER JOIN person
+                                ON director.id = person.id
             ORDER BY imdb_score DESC
         `);
 
@@ -38,10 +44,10 @@ class DAO {
         const sql = `
             UPDATE movie
 
-            SET title        = "${title}",
-                genres       = "${genres}",
-                imdb_score   = "${score}",
-                year = "${release_date}"
+            SET title      = "${title}",
+                genres     = "${genres}",
+                imdb_score = "${score}",
+                year       = "${release_date}"
             WHERE movie.id = ${movie_id};`;
 
         await db.pool.query(sql);
@@ -52,7 +58,8 @@ class DAO {
     async deleteMovieByID(id) {
 
         await db.pool.query(`
-            DELETE FROM movie 
+            DELETE
+            FROM movie
             WHERE movie.id = ${id}`
         ).catch();
 
@@ -98,7 +105,13 @@ class DAO {
         if (title !== undefined && (rating == -1 || rating === undefined || rating === '')) {
             console.log(' Only Title');
             sql = `
-                SELECT movie.id, title, genres, year as release_date, imdb_score, person.name as director, studio.name as studio
+                SELECT movie.id,
+                       title,
+                       genres,
+                       year        as release_date,
+                       imdb_score,
+                       person.name as director,
+                       studio.name as studio
                 FROM movie
                          INNER JOIN person on movie.director_id = person.id
                          INNER JOIN studio on movie.studio_id = studio.id
@@ -106,7 +119,13 @@ class DAO {
         } else if (title === '' && rating != -1) {
             console.log(' Only Rating');
             sql = `
-                SELECT movie.id, title, genres, year as release_date, imdb_score, person.name as director, studio.name as studio
+                SELECT movie.id,
+                       title,
+                       genres,
+                       year        as release_date,
+                       imdb_score,
+                       person.name as director,
+                       studio.name as studio
                 FROM movie
                          INNER JOIN person on movie.director_id = person.id
                          INNER JOIN studio on movie.studio_id = studio.id
@@ -114,7 +133,13 @@ class DAO {
         } else {
             console.log(' Title & Rating');
             sql = `
-                SELECT movie.id, title, genres, year as release_date, imdb_score, person.name as director, studio.name as studio
+                SELECT movie.id,
+                       title,
+                       genres,
+                       year        as release_date,
+                       imdb_score,
+                       person.name as director,
+                       studio.name as studio
                 FROM movie
                          INNER JOIN person on movie.director_id = person.id
                          INNER JOIN studio on movie.studio_id = studio.id
@@ -153,9 +178,9 @@ class DAO {
         const rows = await db.pool.query(`
             SELECT person.id, person.name, actor.age, movie.title as movieTitle
             FROM person
-            INNER JOIN actor ON person.id = actor.id
-            INNER JOIN cast ON actor.id = cast.actor_id
-            INNER JOIN movie on cast.movie_id = movie.id
+                     INNER JOIN actor ON person.id = actor.id
+                     INNER JOIN cast ON actor.id = cast.actor_id
+                     INNER JOIN movie on cast.movie_id = movie.id
             GROUP BY person.name
             ORDER BY person.name
             ;
@@ -185,7 +210,8 @@ class DAO {
 
     async deleteActorByID(actor_id) {
         await db.pool.query(`
-            DELETE FROM actor 
+            DELETE
+            FROM actor
             WHERE actor.id = ${actor_id}`
         ).catch();
 
@@ -203,10 +229,10 @@ class DAO {
             console.log(' Only Title');
             sql = `
                 SELECT person.id, person.name, actor.age, movie.title as movieTitle
-                FROM person 
-                INNER JOIN actor ON actor.id = person.id
-                INNER JOIN cast ON cast.actor_id = actor.id
-                INNER JOIN movie ON cast.movie_id = movie.id
+                FROM person
+                         INNER JOIN actor ON actor.id = person.id
+                         INNER JOIN cast ON cast.actor_id = actor.id
+                         INNER JOIN movie ON cast.movie_id = movie.id
                 WHERE movie.title LIKE '%${title_value}%'`;
         } else if (title_value === '' && (actor_value !== undefined || actor_value !== '')) {
             console.log(' Only Actor');
@@ -217,7 +243,7 @@ class DAO {
                          INNER JOIN cast ON cast.actor_id = actor.id
                          INNER JOIN movie ON cast.movie_id = movie.id
                 WHERE person.name LIKE '%${actor_value}%'
-                `;
+            `;
         } else {
             console.log(' Title & Actor');
             sql = `
@@ -254,8 +280,8 @@ class DAO {
         const rows = await db.pool.query(`
             SELECT person.id, person.name, movie.title, director.oscars as oscars, movie.title as movieTitle
             FROM person
-            INNER JOIN director on person.id = director.id
-            INNER JOIN movie on director.id = movie.director_id
+                     INNER JOIN director on person.id = director.id
+                     INNER JOIN movie on director.id = movie.director_id
             GROUP BY person.name
             ORDER BY person.name;
         `);
@@ -284,15 +310,28 @@ class DAO {
 
     async getAllStudios() {
         const rows = await db.pool.query(`
-            SELECT studio.id, name, movie.title as movieTitle
-            FROM studio 
-            INNER JOIN movie ON studio.id = studio_id
+            SELECT studio.id, location, name, movie.title as movieTitle
+            FROM studio
+                     INNER JOIN movie ON studio.id = studio_id
             ORDER BY name
             ;
         `);
 
         return rows.splice(0);
     }
+
+    async updateStudioByID(studioID, studioName, location) {
+        const sql = `
+            UPDATE studio
+            SET studio.name     = '${studioName}',
+                studio.location = '${location}'
+            WHERE id = ${studioID}`;
+
+        await db.pool.query(sql);
+
+        console.log("DB (studio) => updated: " + studioName)
+    }
+
 
     // Nested Queries
 
@@ -303,9 +342,9 @@ class DAO {
             WHERE imdb_score IN (
                 SELECT max(imdb_score)
                 FROM movie
-                )
+            )
             ORDER BY title;
-            `;
+        `;
 
         let result = await db.pool.query(sql);
 
@@ -316,11 +355,11 @@ class DAO {
         const sql = `
             SELECT title, imdb_score, genres, COUNT(actor.id) as "Number_of_Actors", release_date, director
             FROM movie
-            INNER JOIN actor
-            ON movie.id = actor.movie_id
+                     INNER JOIN actor
+                                ON movie.id = actor.movie_id
             GROUP BY title, imdb_score
             ORDER BY imdb_score DESC;
-            `;
+        `;
 
         let result = await db.pool.query(sql);
 
@@ -368,7 +407,6 @@ class DAO {
 
         return result ?? {};
     }
-
 
 
 }

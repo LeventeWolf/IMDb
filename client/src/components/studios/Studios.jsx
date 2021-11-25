@@ -26,17 +26,17 @@ function Studios() {
             });
     }
 
-    function deleteMovie(id) {
-        Axios.post('http://localhost:3001/api/studios/delete', {movieID: id});
+    function deleteStudio(id) {
+        Axios.post('http://localhost:3001/api/studios/delete', {studioID: id});
 
         setStudios(prevState => {
-            return prevState.filter(movie => {
-                return movie.id !== id
+            return prevState.filter(studio => {
+                return studio.id !== id
             })
         })
     }
 
-    function editMovie(id, values) {
+    function editStudio(id, values) {
         Axios.post('http://localhost:3001/api/studios/update', {id, values})
             .then(response => {
                 setStudios(response.data)
@@ -97,7 +97,7 @@ function Studios() {
 
             <Search showState={showState.searchStudios} search={search}/>
 
-            <AllStudios studios={studios} deleteMovie={deleteMovie} editMovie={editMovie} showState={showState} />
+            <AllStudios studios={studios} deleteStudio={deleteStudio} editStudio={editStudio} showState={showState} />
         </div>
     );
 }

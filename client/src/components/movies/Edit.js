@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import editLogo from '../../media/edit.png';
 import deleteLogo from '../../media/delete.png';
 import tickLogo from '../../media/tick.png';
