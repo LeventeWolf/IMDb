@@ -58,8 +58,8 @@ class DAO {
     async deleteMovieByID(id) {
         await db.pool.query(`
             DELETE
-            FROM person
-            WHERE person.id = ${id}`
+            FROM movie
+            WHERE movie.id = ${id}`
         ).catch();
 
         console.log("DB (movie) => delete id: " + id)
