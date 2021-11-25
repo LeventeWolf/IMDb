@@ -337,8 +337,17 @@ class DAO {
 
     async highestRatedMovies() {
         const sql = `
-            SELECT *
+            SELECT movie.id,
+                   title,
+                   genres,
+                   imdb_score,
+                   person.name as director,
+                   studio.name as studio,
+                   year        as release_date
             FROM movie
+                     INNER JOIN studio ON movie.studio_id = studio.id
+                     INNER JOIN director ON movie.director_id = director.id
+                     INNER JOIN person ON director.id = person.id
             WHERE imdb_score IN (
                 SELECT max(imdb_score)
                 FROM movie
@@ -355,8 +364,7 @@ class DAO {
         const sql = `
             SELECT title, imdb_score, genres, COUNT(actor.id) as "Number_of_Actors", release_date, director
             FROM movie
-                     INNER JOIN actor
-                                ON movie.id = actor.movie_id
+                     INNER JOIN actor ON movie.id = actor.movie_id
             GROUP BY title, imdb_score
             ORDER BY imdb_score DESC;
         `;

@@ -11,11 +11,11 @@ export default function AllMovies({movies, showState}) {
                         <thead>
                         <tr>
                             <th>Title</th>
+                            <th>Year</th>
                             <th>Genre</th>
                             <th className={'yellow'}>Rating</th>
                             <th>Director</th>
                             <th>Studio</th>
-                            <th>Year</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -36,10 +36,10 @@ export default function AllMovies({movies, showState}) {
                         <thead>
                         <tr>
                             <th>Title</th>
+                            <th>Year</th>
                             <th className={'yellow text-center'}>Number of Actors</th>
                             <th>Genre</th>
                             <th>Rating</th>
-                            <th>Year</th>
                         </tr>
                         </thead>
                         <tbody>
