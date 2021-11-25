@@ -36,6 +36,11 @@ function Home() {
             setShowState(() => {
                 return {query_1: false, query_2: false, query_3: true}
             });
+
+            Axios.post('http://localhost:3001/api/nested-query/query-3')
+                .then(response => {
+                    setMovies(response.data);
+                });
         }
     }
 

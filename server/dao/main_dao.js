@@ -409,6 +409,24 @@ class DAO {
         return result ?? {};
     }
 
+    async query_3() {
+        const sql = `
+            SELECT title,
+                   imdb_score,
+                   genres,
+                   year        as release_date,
+                   studio.name as studio
+            FROM movie
+                INNER JOIN cast ON movie.id = cast.movie_id
+                INNER JOIN studio ON movie.studio_id = studio.id
+            GROUP BY movie_id;
+        `;
+
+        let result = await db.pool.query(sql);
+
+        return result ?? {};
+    }
+
     // Diagrams
 
     async getGenreChartData() {
@@ -469,6 +487,7 @@ class DAO {
 
         return result ?? {};
     }
+
 
 
 }

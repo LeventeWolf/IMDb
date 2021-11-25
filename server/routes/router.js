@@ -199,6 +199,12 @@ router.post("/api/nested-query/number-of-actors-per-movie", async (req, res) => 
     return res.status(200).send(result);
 });
 
+router.post("/api/nested-query/query-3", async (req, res) => {
+    const result = await DAO.query_3();
+
+    return res.status(200).send(result);
+});
+
 
 
 // Diagram

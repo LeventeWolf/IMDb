@@ -52,6 +52,29 @@ export default function AllMovies({movies, showState}) {
         );
     }
 
+    if (showState.query_3) {
+        return (
+            <div id="table-wrapper" className={'query'}>
+                <div id="table-scroll" style={{height: "300px"}} className={'style-8 query'}>
+                    <table className="table table-dark">
+                        <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Year</th>
+                            <th>Rating</th>
+                            <th>Genres</th>
+                            <th>Studio</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {movies.map(movie => {return <Movie key={movie.id} movie={movie} showState={showState}/>})}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        );
+    }
+
 
 
     return null;
