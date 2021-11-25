@@ -294,13 +294,17 @@ class DAO {
         return rows.splice(0);
     }
 
-    async deleteDirector(id) {
-        const rows = await db.pool.query(`
+    async deleteDirectorByID(directorID) {
+        await db.pool.query(`
             DELETE FROM director
-            where id = ${id};
+            where id = ${directorID};
         `);
 
-        return rows.splice(0);
+        await db.pool.query(`
+            DELETE FROM movie
+            where director_id = ${directorID};
+        `);
+
     }
 
     async updateDirectorByID(directorID, directorName, oscars) {
@@ -344,6 +348,18 @@ class DAO {
         await db.pool.query(sql);
 
         console.log("DB (studio) => updated: " + studioName)
+    }
+
+    async deleteStudioByID(studioID) {
+        await db.pool.query(`
+            DELETE FROM studio
+            where id = ${studioID};
+        `);
+
+        await db.pool.query(`
+            DELETE FROM movie
+            where studio_id = ${studioID};
+        `);
     }
 
 

@@ -26,8 +26,8 @@ function Directors() {
             });
     }
 
-    function deleteMovie(id) {
-        Axios.post('http://localhost:3001/api/directors/delete', {movieID: id});
+    function deleteDirector(id) {
+        Axios.post('http://localhost:3001/api/directors/delete', {directorID: id});
 
         setDirectors(prevState => {
             return prevState.filter(movie => {
@@ -97,7 +97,7 @@ function Directors() {
 
             <Search showState={showState.searchDirectors} search={search}/>
 
-            <AllDirectors directors={directors} deleteMovie={deleteMovie} editDirector={editDirector} showState={showState} />
+            <AllDirectors directors={directors} deleteDirector={deleteDirector} editDirector={editDirector} showState={showState} />
         </div>
     );
 }

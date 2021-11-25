@@ -114,9 +114,9 @@ router.post("/api/directors", async (req, res) => {
 router.post("/api/directors/delete", async (req, res) => {
     const directorID = req.body.directorID;
 
-    await DAO.deleteByDirector(directorID);
+    await DAO.deleteDirectorByID(directorID);
 
-    console.log("DB => Delete successful director (ID: " + directorID + ")")
+    console.log("DB => Delete successful director with movie (ID: " + directorID + ")")
 
     return res.status(200).end();
 });
@@ -161,6 +161,20 @@ router.post("/api/studios/update", async (req, res) => {
 
     try {
         await DAO.updateStudioByID(studioID, studioName, location);
+    } catch (e) {
+        console.log(e.message);
+    }
+
+    const allStudios = await DAO.getAllStudios();
+    return res.status(200).send(allStudios);
+});
+
+router.post("/api/studios/delete", async (req, res) => {
+    const studioID = req.body.studioID;
+
+    try {
+        await DAO.deleteStudioByID(studioID);
+        console.log("DB delete Studio with Movie: (studioID: " + studioID + ")")
     } catch (e) {
         console.log(e.message);
     }
