@@ -88,7 +88,7 @@ function Home() {
 
                     <button type="button" id="all-movie-btn" className="btn btn-outline-warning p-3 m-3"
                             onClick={() => handleShowAllMovies('query_3')}>
-                        Nested Query 3
+                        Studios average rating
                     </button>
                 </div>
 

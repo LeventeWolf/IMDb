@@ -59,11 +59,9 @@ export default function AllMovies({movies, showState}) {
                     <table className="table table-dark">
                         <thead>
                         <tr>
-                            <th>Title</th>
-                            <th>Year</th>
-                            <th>Rating</th>
-                            <th>Genres</th>
-                            <th>Studio</th>
+                            <th>Studio Name</th>
+                            <th className={'yellow'} style={{textAlign: "center"}}>Average Rating</th>
+                            <th className={'yellow'} style={{textAlign: "center"}}>Produced Movies</th>
                         </tr>
                         </thead>
                         <tbody>

@@ -409,17 +409,13 @@ class DAO {
         return result ?? {};
     }
 
-    async query_3() {
+    async studios_average_rating() {
         const sql = `
-            SELECT title,
-                   imdb_score,
-                   genres,
-                   year        as release_date,
-                   studio.name as studio
-            FROM movie
-                INNER JOIN cast ON movie.id = cast.movie_id
-                INNER JOIN studio ON movie.studio_id = studio.id
-            GROUP BY movie_id;
+            SELECT name, ROUND(AVG(imdb_score), 2) as avg_rating, COUNT(movie.id) as produced_movies
+            FROM studio
+                INNER JOIN movie on studio.id = studio_id
+            GROUP BY studio.name
+            ORDER BY produced_movies DESC;
         `;
 
         let result = await db.pool.query(sql);

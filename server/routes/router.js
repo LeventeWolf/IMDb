@@ -200,7 +200,7 @@ router.post("/api/nested-query/number-of-actors-per-movie", async (req, res) => 
 });
 
 router.post("/api/nested-query/query-3", async (req, res) => {
-    const result = await DAO.query_3();
+    const result = await DAO.studios_average_rating();
 
     return res.status(200).send(result);
 });

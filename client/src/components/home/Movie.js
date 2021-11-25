@@ -30,11 +30,9 @@ export default function Movie({ movie, showState }) {
     if (showState.query_3) {
         return (
             <tr>
-                <td style={{width: "300px"}}>{movie.title} </td>
-                <td> {movie.release_date}</td>
-                <td> {movie.imdb_score}</td>
-                <td>{movie.genres}</td>
-                <td>{movie.studio}</td>
+                <td> {movie.name}</td>
+                <td  style={{textAlign: "center"}} className={'yellow'}> {movie.avg_rating}</td>
+                <td  style={{textAlign: "center"}} className={'yellow'}> {movie.produced_movies}</td>
             </tr>
         );
     }
