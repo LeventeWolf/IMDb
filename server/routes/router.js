@@ -106,9 +106,9 @@ router.post("/api/actors/search", async (req, res) => {
 // Directors
 
 router.post("/api/directors", async (req, res) => {
-    const allMovies = await DAO.getAllDirectors();
+    const allDirectors = await DAO.getAllDirectors();
 
-    return res.status(200).send(allMovies);
+    return res.status(200).send(allDirectors);
 });
 
 router.post("/api/directors/delete", async (req, res) => {
@@ -122,17 +122,16 @@ router.post("/api/directors/delete", async (req, res) => {
 });
 
 router.post("/api/directors/update", async (req, res) => {
-    const directorID = req.body.directorID;
+    const directorID = req.body.id;
     const directorName = req.body.values.directorName;
+    const oscars = req.body.values.oscars;
 
     try {
-        await DAO.updateDirectorByID(directorID, directorName);
+        await DAO.updateDirectorByID(directorID, directorName, oscars);
     } catch (e) {
         console.log(e.message);
     }
 
-
-    console.log("DB => Update successful actor (ID: " + directorName + ")")
 
     const allMovies = await DAO.getAllDirectors();
     return res.status(200).send(allMovies);

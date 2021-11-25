@@ -252,10 +252,10 @@ class DAO {
     // Director
     async getAllDirectors() {
         const rows = await db.pool.query(`
-            SELECT person.id, person.name, movie.title as movieTitle
+            SELECT person.id, person.name, movie.title, director.oscars as oscars, movie.title as movieTitle
             FROM person
-            INNER JOIN director d on person.id = d.id
-            INNER JOIN movie on d.id = movie.director_id
+            INNER JOIN director on person.id = director.id
+            INNER JOIN movie on director.id = movie.director_id
             GROUP BY person.name
             ORDER BY person.name;
         `);
@@ -263,6 +263,22 @@ class DAO {
         return rows.splice(0);
     }
 
+    async updateDirectorByID(directorID, directorName, oscars) {
+        const sql = `
+            UPDATE person
+            SET name = '${directorName}'
+            WHERE id = ${directorID}`;
+
+        const sql2 = `
+            UPDATE director
+            SET oscars = '${oscars}'
+            WHERE id = ${directorID}`;
+
+        await db.pool.query(sql2);
+        await db.pool.query(sql);
+
+        console.log("DB (director) => updated: " + directorName)
+    }
 
     // Studio
 
@@ -352,6 +368,7 @@ class DAO {
 
         return result ?? {};
     }
+
 
 
 }

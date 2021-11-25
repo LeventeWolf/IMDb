@@ -36,7 +36,7 @@ function Directors() {
         })
     }
 
-    function editMovie(id, values) {
+    function editDirector(id, values) {
         Axios.post('http://localhost:3001/api/directors/update', {id, values})
             .then(response => {
                 setDirectors(response.data)
@@ -97,7 +97,7 @@ function Directors() {
 
             <Search showState={showState.searchDirectors} search={search}/>
 
-            <AllDirectors directors={directors} deleteMovie={deleteMovie} editMovie={editMovie} showState={showState} />
+            <AllDirectors directors={directors} deleteMovie={deleteMovie} editDirector={editDirector} showState={showState} />
         </div>
     );
 }

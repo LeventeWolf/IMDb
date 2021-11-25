@@ -10,6 +10,7 @@ export default function AllDirectors({directors, showState, deleteDirector, edit
                     <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Oscars</th>
                         <th>Title</th>
 
                         {showState.editDirectors ? <th>Edit</th> : null}
