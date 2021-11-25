@@ -22,6 +22,7 @@ export default function Movie({ movie, showState }) {
                 <td> {movie.imdb_score}</td>
                 <td style={{textAlign: "center"}} className={showState ? 'yellow' : null} >{movie.Number_of_Actors}</td>
                 <td>{movie.genres}</td>
+                <td>{movie.studio}</td>
             </tr>
         );
     }

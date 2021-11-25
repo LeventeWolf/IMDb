@@ -56,11 +56,10 @@ class DAO {
     }
 
     async deleteMovieByID(id) {
-
         await db.pool.query(`
             DELETE
-            FROM movie
-            WHERE movie.id = ${id}`
+            FROM person
+            WHERE person.id = ${id}`
         ).catch();
 
         console.log("DB (movie) => delete id: " + id)
@@ -289,6 +288,15 @@ class DAO {
         return rows.splice(0);
     }
 
+    async deleteDirector(id) {
+        const rows = await db.pool.query(`
+            DELETE FROM director
+            where id = ${id};
+        `);
+
+        return rows.splice(0);
+    }
+
     async updateDirectorByID(directorID, directorName, oscars) {
         const sql = `
             UPDATE person
@@ -362,11 +370,16 @@ class DAO {
 
     async numberOfActorsPerMovie() {
         const sql = `
-            SELECT title, imdb_score, genres, COUNT(actor.id) as "Number_of_Actors", release_date, director
+            SELECT title,
+                   imdb_score,
+                   genres,
+                   COUNT(cast.actor_id) as "Number_of_Actors",
+                   year            as release_date,
+                   studio.name as studio
             FROM movie
-                     INNER JOIN actor ON movie.id = actor.movie_id
-            GROUP BY title, imdb_score
-            ORDER BY imdb_score DESC;
+                INNER JOIN cast ON movie.id = cast.movie_id
+                INNER JOIN studio ON movie.studio_id = studio.id
+            GROUP BY movie_id;
         `;
 
         let result = await db.pool.query(sql);
@@ -379,15 +392,34 @@ class DAO {
     async getGenreChartData() {
         // language=MySQL
         const sql = `
-            SELECT genres, COUNT(genres) as count
+            SELECT genres
             FROM movie
             GROUP BY genres;
         `;
 
         const result = [['Genres Distribution', '%']];
 
+        const genres = new Set();
+        const allGenres = []
+
         for (const element of await db.pool.query(sql)) {
-            result.push([element.genres, element.count])
+            for (let genre of element.genres.split(', ')) {
+                genres.add(genre)
+                allGenres.push(genre)
+            }
+        }
+
+        for (const genre of genres) {
+            result.push([genre, count(genre, allGenres)])
+        }
+
+        function count(genre, list) {
+            let result = 0;
+            for (let i = 0; i < list.length; i++) {
+                if (list[i] === genre)
+                    result++;
+            }
+            return result
         }
 
         return result ?? {};

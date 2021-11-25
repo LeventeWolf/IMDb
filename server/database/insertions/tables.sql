@@ -8,7 +8,9 @@ CREATE TABLE IF NOT EXISTS movie
     imdb_score   FLOAT,
     seen         INT,
     director_id  INT,
-    studio_id    INT
+    studio_id    INT,
+    FOREIGN KEY (director_id) REFERENCES person (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (studio_id) REFERENCES studio (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS person (
@@ -17,18 +19,21 @@ CREATE TABLE IF NOT EXISTS person (
     PRIMARY KEY (id)
 ) ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS actor
+CREATE TABLE IF NOT EXISTS imdb.actor
 (
     id       INT            NOT NULL AUTO_INCREMENT,
     age      INT            NOT NULL,
-    FOREIGN KEY (id) REFERENCES person (id)
+    FOREIGN KEY (id) REFERENCES person (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB;
+
+ALTER TABLE `actor` ADD CONSTRAINT `actor_2` FOREIGN KEY (`id`) REFERENCES `cast`(`actor_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 
 CREATE TABLE IF NOT EXISTS imdb.director
 (
-    id       INT           NOT NULL AUTO_INCREMENT,
-    oscars   INT           NOT NULL,
-    FOREIGN KEY (id) REFERENCES person (id)
+    id     INT NOT NULL AUTO_INCREMENT,
+    oscars INT NOT NULL,
+    FOREIGN KEY (id) REFERENCES person (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 
@@ -44,10 +49,12 @@ CREATE TABLE IF NOT EXISTS imdb.studio
 CREATE TABLE IF NOT EXISTS imdb.cast
 (
     movie_id INT NOT NULL,
-    actor_id INT NOT NULL
+    actor_id INT NOT NULL,
+    FOREIGN KEY (movie_id) REFERENCES movie (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (actor_id) REFERENCES person (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 ALTER TABLE `cast`
     ADD CONSTRAINT `actor_check` FOREIGN KEY (`actor_id`) REFERENCES `actor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `cast`
-    ADD CONSTRAINT `movie_check` FOREIGN KEY (`movie_id`) REFERENCES `movie` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT ;
+    ADD CONSTRAINT `movie_check` FOREIGN KEY (`movie_id`) REFERENCES `movie` (`id`) ON DELETE CASCADE ON UPDATE CASCADE ;

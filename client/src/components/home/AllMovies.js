@@ -37,9 +37,10 @@ export default function AllMovies({movies, showState}) {
                         <tr>
                             <th>Title</th>
                             <th>Year</th>
-                            <th className={'yellow text-center'}>Number of Actors</th>
-                            <th>Genre</th>
                             <th>Rating</th>
+                            <th className={'yellow text-center'}>Number of Actors</th>
+                            <th>Genres</th>
+                            <th>Studio</th>
                         </tr>
                         </thead>
                         <tbody>
