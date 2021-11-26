@@ -431,7 +431,7 @@ class DAO {
                    year            as release_date,
                    studio.name as studio
             FROM movie
-                INNER JOIN cast ON movie.id = cast.movie_id
+                LEFT JOIN cast ON movie.id = cast.movie_id
                 INNER JOIN studio ON movie.studio_id = studio.id
             GROUP BY movie_id;
         `;
