@@ -53,7 +53,7 @@ router.post("/api/movies/add", async (req, res) => {
     try {
         await DAO.addNewMovie(title, year, genres, imdb_score, studio, director);
         console.log("DB add new movie (title): " + title)
-    } catch (e){
+    } catch (e) {
         console.log(e.message)
     }
 
@@ -124,7 +124,7 @@ router.post("/api/actors/add", async (req, res) => {
     try {
         await DAO.addNewActor(name, age, title);
         console.log("DB add new movie (title): " + title)
-    } catch (e){
+    } catch (e) {
         console.log(e.message)
     }
 
@@ -213,7 +213,6 @@ router.post("/api/studios/delete", async (req, res) => {
 });
 
 
-
 // Nested Queries
 
 router.post("/api/nested-query/highest-rated-movies", async (req, res) => {
@@ -235,7 +234,6 @@ router.post("/api/nested-query/query-3", async (req, res) => {
 });
 
 
-
 // Diagram
 
 router.post("/api/chart/genre-chart-data", async (req, res) => {
@@ -249,8 +247,6 @@ router.post("/api/chart/bar-chart-data", async (req, res) => {
 
     return res.status(200).send(result);
 });
-
-
 
 
 module.exports = router;
