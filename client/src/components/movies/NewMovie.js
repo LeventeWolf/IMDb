@@ -8,10 +8,10 @@ export default function NewMovie({addNewMovie}) {
         const genres = document.getElementsByName(0 + '-genres').item(0).value;
         const imdb_score = document.getElementsByName(0 + '-imdb_score').item(0).value;
         const release_date = document.getElementsByName(0 + '-release_date').item(0).value;
-        const director = document.getElementsByName(0 + '-director').item(0).value;
-        const studio = document.getElementsByName(0 + '-studio').item(0).value;
+        const length = document.getElementsByName(0 + '-length').item(0).value;
+        const seen = document.getElementsByName(0 + '-seen').item(0).value;
 
-        return {title, genres, imdb_score, release_date, director, studio}
+        return {title, genres, imdb_score, release_date, length, seen}
     }
 
     return (
@@ -20,8 +20,8 @@ export default function NewMovie({addNewMovie}) {
             <td><input type={'text'}  name={0 + '-release_date'}/></td>
             <td><input type={'text'}  name={0 + '-genres'}   />  </td>
             <td><input type={'text'}  name={0 + '-imdb_score'}/></td>
-            <td><input type={'text'}  name={0 + '-director'}/></td>
-            <td><input type={'text'}  name={0 + '-studio'}/></td>
+            <td><input type={'text'}  name={0 + '-length'}/></td>
+            <td><input type={'text'}  name={0 + '-seen'}/></td>
             <td onClick={() => {addNewMovie(newMovieValues())}}>
                 <img src={tickLogo} style={{width: "20px", marginLeft: "6px"}} alt={"edit"}/></td>
             <td><img src={deleteLogo} style={{width: "20px", textAlign: "center"}} alt={"del"}/></td>

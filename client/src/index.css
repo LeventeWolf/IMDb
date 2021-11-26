@@ -100,6 +100,14 @@ table td input[name$='release_date'] {
     width: 50px !important;
 }
 
+table td input[name$='length'] {
+    width: 50px !important;
+}
+
+table td input[name$='seen'] {
+    width: 100px !important;
+}
+
 
 /* Scrollbar */
 .style-8::-webkit-scrollbar-track {

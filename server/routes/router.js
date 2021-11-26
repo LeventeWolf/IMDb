@@ -26,12 +26,13 @@ router.post("/api/movies/update", async (req, res) => {
     const title = req.body.values.title;
     const genres = req.body.values.genres;
     const imdb_score = parseFloat(req.body.values.imdb_score);
-    const director = req.body.values.director;
     const release_date = parseInt(req.body.values.release_date);
+    const length = req.body.values.length;
+    const seen = req.body.values.seen;
 
     console.log("Movie ID: " + movieID)
     try {
-        await DAO.updateMovieByID(movieID, title, genres, imdb_score, release_date);
+        await DAO.updateMovieByID(movieID, title, genres, imdb_score, release_date, length, seen);
         console.log("DB => Update successful (ID: " + movieID + ")")
     } catch (e) {
         console.log(e.message);
@@ -46,12 +47,12 @@ router.post("/api/movies/add", async (req, res) => {
     const genres = req.body.values.genres;
     const year = req.body.values.release_date;
     const imdb_score = req.body.values.imdb_score;
-    const director = req.body.values.director;
-    const studio = req.body.values.studio;
+    const length = req.body.values.length;
+    const seen = req.body.values.seen;
 
 
     try {
-        await DAO.addNewMovie(title, year, genres, imdb_score, studio, director);
+        await DAO.addNewMovie(title, year, genres, imdb_score, length, seen);
         console.log("DB add new movie (title): " + title)
     } catch (e) {
         console.log(e.message)

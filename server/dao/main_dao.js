@@ -6,34 +6,21 @@ class DAO {
     // Movie
     async getAllMovie() {
         const rows = await db.pool.query(`
-            SELECT movie.id,
-                   title,
-                   genres,
-                   imdb_score,
-                   person.name as director,
-                   studio.name as studio,
-                   year        as release_date
+            SELECT *, year as release_date
             FROM movie
-                     INNER JOIN studio ON movie.studio_id = studio.id
-                     INNER JOIN person ON movie.director_id = person.id
-            ORDER BY imdb_score DESC
+            ORDER BY imdb_score DESC;
         `);
 
         return rows.splice(0);
     }
 
-    async addNewMovie(title, year, genres, imdb_score, studio, director) {
-        const directorID = await this.getDirectorIDByName(director);
-        const studioID = await this.getStudioIDByName(studio);
-        console.log("directorID" + " " + directorID)
-        console.log("studioID" + " " + studioID)
-
+    async addNewMovie(title, year, genres, imdb_score, length, seen) {
         const sql = `
-        INSERT INTO movie (title,       year,      genres,        imdb_score,     director_id, studio_id, seen, length)
-        VALUES           ('${title}', '${year}', '${genres}', '${imdb_score}',  ${directorID}, ${studioID}, 0, 0);`
+        INSERT INTO movie (title,       year,      genres,        imdb_score,   length,   seen)
+        VALUES           ('${title}', '${year}', '${genres}', '${imdb_score}',  ${length}, ${seen});`
 
         try {
-            console.log(title, genres, year, imdb_score, studio, director)
+            console.log(title, genres, year, imdb_score, length, seen)
             await db.pool.query(sql);
             console.log('DB (movie) => INSERT INTO: ' + title + " " + genres)
         } catch (e) {
@@ -42,14 +29,16 @@ class DAO {
         }
     }
 
-    async updateMovieByID(movie_id, title, genres, score, release_date) {
+    async updateMovieByID(movie_id, title, genres, score, release_date, length, seen) {
         const sql = `
             UPDATE movie
 
             SET title      = "${title}",
                 genres     = "${genres}",
                 imdb_score = "${score}",
-                year       = "${release_date}"
+                year       = "${release_date}",
+                length     = "${length}",
+                seen       = "${seen}"
             WHERE movie.id = ${movie_id};`;
 
         await db.pool.query(sql);
@@ -106,44 +95,20 @@ class DAO {
         if (title !== undefined && (rating == -1 || rating === undefined || rating === '')) {
             console.log(' Only Title');
             sql = `
-                SELECT movie.id,
-                       title,
-                       genres,
-                       year        as release_date,
-                       imdb_score,
-                       person.name as director,
-                       studio.name as studio
+                SELECT *, year as release_date
                 FROM movie
-                         INNER JOIN person on movie.director_id = person.id
-                         INNER JOIN studio on movie.studio_id = studio.id
                 WHERE title LIKE '%${title}%'`;
         } else if (title === '' && rating != -1) {
             console.log(' Only Rating');
             sql = `
-                SELECT movie.id,
-                       title,
-                       genres,
-                       year        as release_date,
-                       imdb_score,
-                       person.name as director,
-                       studio.name as studio
+                SELECT *, year as release_date
                 FROM movie
-                         INNER JOIN person on movie.director_id = person.id
-                         INNER JOIN studio on movie.studio_id = studio.id
                 WHERE imdb_score ${filter_method} ${rating}`;
         } else {
             console.log(' Title & Rating');
             sql = `
-                SELECT movie.id,
-                       title,
-                       genres,
-                       year        as release_date,
-                       imdb_score,
-                       person.name as director,
-                       studio.name as studio
+                SELECT *, year as release_date
                 FROM movie
-                         INNER JOIN person on movie.director_id = person.id
-                         INNER JOIN studio on movie.studio_id = studio.id
                 WHERE title LIKE '%${title}%'
                   AND imdb_score ${filter_method} ${rating}`;
         }
