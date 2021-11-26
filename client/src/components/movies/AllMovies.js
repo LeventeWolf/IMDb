@@ -1,8 +1,9 @@
 import React from 'react'
 import Movie from './Movie'
 import Edit from './Edit'
+import NewMovie from "./NewMovie";
 
-export default function AllMovies({movies, showState, deleteMovie, editMovie}) {
+export default function AllMovies({movies, showState, deleteMovie, editMovie, addNewMovie, addNewMovieState}) {
     return (
         <div id="table-wrapper">
             <div id="table-scroll" className={'style-8'}>
@@ -21,6 +22,9 @@ export default function AllMovies({movies, showState, deleteMovie, editMovie}) {
                     </tr>
                     </thead>
                     <tbody>
+                    {
+                        addNewMovieState ? <NewMovie key={0} addNewMovie={addNewMovie}/> : null
+                    }
                     {
                         showState.editMovies ?
                             movies.map(movie => {

@@ -6,18 +6,24 @@ import Axios from 'axios';
 function Movies() {
     const [movies, setMovies] = useState([])
     const [showState, setShowState] = useState({allMovies: false, editMovies: false, searchMovies: false});
+    const [addNewMovieState, setAddNewMovieState] = useState(false);
 
     function handleShowAllMovies(mode) {
         if (mode === 'allMovies') {
             setShowState(() => {
                 return {allMovies: true, editMovies: false, searchMovies: false}
             });
+            const addNewMovieButton = document.getElementById('addNewMovie')
+            addNewMovieButton.classList.add('d-none')
+            setAddNewMovieState(false)
         }
 
         if (mode === 'editMovies') {
             setShowState(() => {
                 return {allMovies: false, editMovies: true, searchMovies: false}
             });
+            const addNewMovieButton = document.getElementById('addNewMovie')
+            addNewMovieButton.classList.remove('d-none')
         }
 
         Axios.post('http://localhost:3001/api/movies')
@@ -44,21 +50,30 @@ function Movies() {
             .catch(response => {
                 setMovies(movies)
             })
-
         ;
     }
 
-    function resetMovies() {
-        Axios.post('http://localhost:3001/api/movies/reset')
+    function addNewMovieToggle() {
+        setAddNewMovieState(!addNewMovieState)
+    }
+
+    function addNewMovie(values){
+        Axios.post('http://localhost:3001/api/movies/add', {values})
             .then(response => {
                 setMovies(response.data)
             });
+
     }
 
     function handleShowSearch() {
         setShowState(() => {
             return {allMovies: true, editMovies: false, searchMovies: !showState.searchMovies}
         });
+
+        const addNewMovieButton = document.getElementById('addNewMovie')
+        addNewMovieButton.classList.add('d-none')
+        setAddNewMovieState(false)
+
 
     }
 
@@ -89,15 +104,16 @@ function Movies() {
                     Search Movies
                 </button>
 
-                <button onClick={resetMovies} className="btn btn-outline-danger p-3 m-3"
+                <button onClick={addNewMovieToggle} id={'addNewMovie'} className="d-none btn btn-outline-info p-3 m-3"
                         style={{position: "relative", float: "right", marginRight: "20px"}}>
-                    Reset Movies
+                    Add New Movie
                 </button>
             </div>
 
             <Search showState={showState.searchMovies} search={search}/>
 
-            <AllMovies movies={movies} deleteMovie={deleteMovie} editMovie={editMovie} showState={showState} />
+            <AllMovies movies={movies} deleteMovie={deleteMovie} editMovie={editMovie} showState={showState}
+                       addNewMovie={addNewMovie} addNewMovieState={addNewMovieState} />
         </div>
     );
 }

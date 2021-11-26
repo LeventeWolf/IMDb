@@ -26,12 +26,18 @@ class DAO {
         return rows.splice(0);
     }
 
-    async addNewMovie(title, genres, score, director, year) {
+    async addNewMovie(title, year, genres, imdb_score, studio, director) {
+        const directorID = await this.getDirectorIDByName(director);
+        const studioID = await this.getStudioIDByName(studio);
+        console.log("directorID" + " " + directorID)
+        console.log("studioID" + " " + studioID)
+
         const sql = `
-        INSERT INTO movie (title, release_date,    director,    genres,   the_movie_is, length, write_down, src, imdb_score, seen, trailer_url)
-        VALUES           ('${title}', '${year}', '${director}', '${genres}',   'a',     0,  'write_down', 'src', ${score}, 0, 'trailer')`;
+        INSERT INTO movie (title,       year,      genres,        imdb_score,     director_id, studio_id, seen, length)
+        VALUES           ('${title}', '${year}', '${genres}', '${imdb_score}',  ${directorID}, ${studioID}, 0, 0);`
 
         try {
+            console.log(title, genres, year, imdb_score, studio, director)
             await db.pool.query(sql);
             console.log('DB (movie) => INSERT INTO: ' + title + " " + genres)
         } catch (e) {
@@ -324,6 +330,20 @@ class DAO {
         console.log("DB (director) => updated: " + directorName)
     }
 
+    async getDirectorIDByName(director) {
+        const sql = `
+            SELECT id
+            FROM person
+            WHERE person.name = '${director}'
+        `
+
+        const result = await db.pool.query(sql);
+
+        return result.splice(0)[0].id ?? -1;
+    }
+
+
+
     // Studio
 
     async getAllStudios() {
@@ -360,6 +380,18 @@ class DAO {
             DELETE FROM movie
             where studio_id = ${studioID};
         `);
+    }
+
+    async getStudioIDByName(studio) {
+        const sql = `
+            SELECT id
+            FROM studio
+            WHERE studio.name = '${studio}'
+        `
+
+        const result = await db.pool.query(sql);
+
+        return result.splice(0)[0].id ?? -1;
     }
 
 
@@ -483,7 +515,6 @@ class DAO {
 
         return result ?? {};
     }
-
 
 
 }

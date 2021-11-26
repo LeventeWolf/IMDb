@@ -41,8 +41,21 @@ router.post("/api/movies/update", async (req, res) => {
     return res.status(200).send(allMovies);
 });
 
-router.post("/api/movies/reset", async (req, res) => {
-    await DAO.resetMovies();
+router.post("/api/movies/add", async (req, res) => {
+    const title = req.body.values.title;
+    const genres = req.body.values.genres;
+    const year = req.body.values.release_date;
+    const imdb_score = req.body.values.imdb_score;
+    const director = req.body.values.director;
+    const studio = req.body.values.studio;
+
+
+    try {
+        await DAO.addNewMovie(title, year, genres, imdb_score, studio, director);
+        console.log("DB add new movie (title): " + title)
+    } catch (e){
+        console.log(e.message)
+    }
 
     const allMovies = await DAO.getAllMovie();
 
