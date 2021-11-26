@@ -534,11 +534,7 @@ class DAO {
 
     async highestRatedMovies() {
         const sql = `
-            SELECT movie.id,
-                   title,
-                   genres,
-                   imdb_score,
-                   studio.name as studio,
+            SELECT movie.id, title, genres, imdb_score, studio.name as studio,
                    year        as release_date,
                    person.name as director
             FROM movie
@@ -560,12 +556,10 @@ class DAO {
 
     async numberOfActorsPerMovie() {
         const sql = `
-            SELECT title,
-                   imdb_score,
-                   genres,
+            SELECT title, imdb_score, genres,
                    COUNT(cast.actor_id) as "Number_of_Actors",
-                   year            as release_date,
-                   studio.name as studio
+                   year                 as release_date,
+                   studio.name          as studio
             FROM movie
                 LEFT JOIN cast ON movie.id = cast.movie_id
                 INNER JOIN studio ON movie.studio_id = studio.id
@@ -579,7 +573,9 @@ class DAO {
 
     async studios_average_rating() {
         const sql = `
-            SELECT name, ROUND(AVG(imdb_score), 2) as avg_rating, COUNT(movie.id) as produced_movies
+            SELECT name, 
+                   ROUND(AVG(imdb_score), 2) as avg_rating,
+                   COUNT(movie.id)           as produced_movies
             FROM studio
                 INNER JOIN movie on studio.id = studio_id
             GROUP BY studio.name
