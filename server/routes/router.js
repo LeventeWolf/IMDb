@@ -128,8 +128,7 @@ router.post("/api/actors/add", async (req, res) => {
         console.log(e.message)
     }
 
-    const allActors = await DAO.getAllMovie();
-
+    const allActors = await DAO.getAllActors();
     return res.status(200).send(allActors);
 });
 

@@ -14,12 +14,19 @@ function Actors() {
             setShowActorState(() => {
                 return {allActors: true, editActors: false, searchActors: false}
             });
+
+            const addNewActorButton = document.getElementById('addNewActor')
+            addNewActorButton.classList.add('d-none')
+            setAddNewActorState(false)
         }
 
         if (mode === 'editActors') {
             setShowActorState(() => {
                 return {allActors: false, editActors: true, searchActors: false}
             });
+
+            const addNewActorButton = document.getElementById('addNewActor')
+            addNewActorButton.classList.remove('d-none')
         }
 
         Axios.post('http://localhost:3001/api/actors')
@@ -62,6 +69,9 @@ function Actors() {
             return {allActors: true, editActors: false, searchActors: !showActorState.searchActors}
         });
 
+        const addNewActorButton = document.getElementById('addNewActor')
+        addNewActorButton.classList.add('d-none')
+        setAddNewActorState(false)
     }
 
     function search(){
@@ -71,7 +81,6 @@ function Actors() {
             .then(response => {
                 setActors(response.data)
             });
-
     }
 
     function addNewActorToggle(){
@@ -101,9 +110,9 @@ function Actors() {
                     Search Actors
                 </button>
 
-                <button onClick={addNewActorToggle} className="btn btn-outline-info p-3 m-3"
+                <button id={'addNewActor'} onClick={addNewActorToggle} className="d-none btn btn-outline-info p-3 m-3"
                         style={{position: "relative", float: "right", marginRight: "20px"}}>
-                    Add New Actors
+                    Add New Actor
                 </button>
             </div>
 

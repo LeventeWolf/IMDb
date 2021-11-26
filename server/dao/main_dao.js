@@ -301,26 +301,69 @@ class DAO {
     async addNewActor(name, age, title) {
         const movieId = await this.getMovieIDByTitle(title);
 
+        console.log("Adding new actor: " + name, age, title)
+
         const sql_person = `
         INSERT INTO person (name)
         VALUES           ('${name}');`
 
-        const person_id = this.getLastPersonID();
+        try {
+            await db.pool.query(sql_person);
+        } catch (e){
+            console.log(e.message)
+            console.log("Insert into person failed!")
+            return -1
+        }
+
+        const person_id = await this.getLastPersonID();
 
         const sql_actor = `
         INSERT INTO actor (id, age)
         VALUES           (${person_id}, ${age});`
 
-        const actor_id = this.getLastActorID();
+        try {
+            await db.pool.query(sql_actor);
+        } catch (e) {
+            console.log(e.message)
+            console.log("Insert into actor failed")
+            return -1;
+        }
 
+        const actor_id = await this.getLastActorID();
+
+        console.log("Person (ID): " + person_id)
+        console.log("Actor (ID): " + actor_id)
+        console.log("Movie (ID): " + movieId)
+
+        const sql_cast = `
+        INSERT INTO imdb.cast (movie_id, actor_id) 
+        VALUES (${movieId}, ${actor_id});
+        `
 
         try {
-            await db.pool.query(sql);
-            console.log('DB (actor) => INSERT INTO: ' + name + " " + title)
+            await db.pool.query(sql_cast);
+            console.log('DB Cast => INSERT INTO: ' + name + " " + title)
         } catch (e) {
-            console.log('DB (movie) => INSERT INTO FAILED')
-            throw e;
+            console.log('DB Cast => INSERT INTO FAILED')
+            console.log(e.message);
         }
+    }
+
+
+    async getLastActorID() {
+        const sql = `
+            SELECT id
+            FROM actor
+        `
+
+        const result = await db.pool.query(sql);
+
+        let len = 0;
+        for (const row of result) len++;
+
+        const actorID = result.splice(0)[len - 1].id
+
+        return actorID ?? -1;
     }
 
     // Director
@@ -473,8 +516,21 @@ class DAO {
 
     // Person
 
-    getLastPersonID() {
-        return undefined;
+    async getLastPersonID() {
+        const sql = `
+            SELECT id
+            FROM person
+        `
+
+        const result = await db.pool.query(sql);
+
+        let len = 0;
+        for (const row of result) len++;
+
+        const lastID = result.splice(0)[len - 1].id;
+        console.log("lastID: " + lastID)
+
+        return lastID;
     }
 
 
