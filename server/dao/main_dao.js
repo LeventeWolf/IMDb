@@ -14,12 +14,8 @@ class DAO {
                    studio.name as studio,
                    year        as release_date
             FROM movie
-                     INNER JOIN studio
-                                ON movie.studio_id = studio.id
-                     INNER JOIN director ON
-                movie.director_id = director.id
-                     INNER JOIN person
-                                ON director.id = person.id
+                     INNER JOIN studio ON movie.studio_id = studio.id
+                     INNER JOIN person ON movie.director_id = person.id
             ORDER BY imdb_score DESC
         `);
 
@@ -542,13 +538,12 @@ class DAO {
                    title,
                    genres,
                    imdb_score,
-                   person.name as director,
                    studio.name as studio,
-                   year        as release_date
+                   year        as release_date,
+                   person.name as director
             FROM movie
                      INNER JOIN studio ON movie.studio_id = studio.id
-                     INNER JOIN director ON movie.director_id = director.id
-                     INNER JOIN person ON director.id = person.id
+                     INNER JOIN person ON movie.director_id = person.id
             WHERE imdb_score IN (
                 SELECT max(imdb_score)
                 FROM movie
@@ -557,6 +552,8 @@ class DAO {
         `;
 
         let result = await db.pool.query(sql);
+
+        console.log(result)
 
         return result ?? {};
     }
