@@ -116,6 +116,23 @@ router.post("/api/actors/search", async (req, res) => {
     return res.status(200).send(foundMovies);
 });
 
+router.post("/api/actors/add", async (req, res) => {
+    const name = req.body.values.name;
+    const age = req.body.values.age;
+    const title = req.body.values.title;
+
+    try {
+        await DAO.addNewActor(name, age, title);
+        console.log("DB add new movie (title): " + title)
+    } catch (e){
+        console.log(e.message)
+    }
+
+    const allActors = await DAO.getAllMovie();
+
+    return res.status(200).send(allActors);
+});
+
 // Directors
 
 router.post("/api/directors", async (req, res) => {

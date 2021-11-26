@@ -178,6 +178,18 @@ class DAO {
         }
     }
 
+    async getMovieIDByTitle(title) {
+        const sql = `
+            SELECT id
+            FROM movie
+            WHERE title = '${title}'
+        `
+
+        const result = await db.pool.query(sql);
+
+        return result.splice(0)[0].id ?? -1;
+    }
+
     // Actor
     async getAllActors() {
         const rows = await db.pool.query(`
@@ -286,6 +298,31 @@ class DAO {
 
     }
 
+    async addNewActor(name, age, title) {
+        const movieId = await this.getMovieIDByTitle(title);
+
+        const sql_person = `
+        INSERT INTO person (name)
+        VALUES           ('${name}');`
+
+        const person_id = this.getLastPersonID();
+
+        const sql_actor = `
+        INSERT INTO actor (id, age)
+        VALUES           (${person_id}, ${age});`
+
+        const actor_id = this.getLastActorID();
+
+
+        try {
+            await db.pool.query(sql);
+            console.log('DB (actor) => INSERT INTO: ' + name + " " + title)
+        } catch (e) {
+            console.log('DB (movie) => INSERT INTO FAILED')
+            throw e;
+        }
+    }
+
     // Director
     async getAllDirectors() {
         const rows = await db.pool.query(`
@@ -342,6 +379,29 @@ class DAO {
         return result.splice(0)[0].id ?? -1;
     }
 
+    async addNewDirector(name, oscars, title) {
+        const movieId = await this.getMovieIDByTitle(title);
+
+        const sql_person = `
+        INSERT INTO person (name)
+        VALUES           ('${name}');`
+
+        const person_id = this.getLastPersonID();
+
+        const sql_director = `
+        INSERT INTO actor (id, oscars)
+        VALUES           (${person_id}, ${oscars});`
+
+
+        try {
+            await db.pool.query(sql);
+            console.log('DB (actor) => INSERT INTO: ' + name + " " + title)
+        } catch (e) {
+            console.log('DB (movie) => INSERT INTO FAILED')
+            throw e;
+        }
+    }
+
 
 
     // Studio
@@ -392,6 +452,29 @@ class DAO {
         const result = await db.pool.query(sql);
 
         return result.splice(0)[0].id ?? -1;
+    }
+
+    async addNewStudio(name, location, title) {
+        const movieId = await this.getMovieIDByTitle(title);
+
+        const sql = `
+        INSERT INTO person (name)
+        VALUES           ('${name}');`
+
+        try {
+            await db.pool.query(sql);
+            console.log('DB (studio) => INSERT INTO: ' + name + " " + location)
+        } catch (e) {
+            console.log('DB (studio) => INSERT INTO FAILED')
+            throw e;
+        }
+    }
+
+
+    // Person
+
+    getLastPersonID() {
+        return undefined;
     }
 
 
@@ -515,7 +598,6 @@ class DAO {
 
         return result ?? {};
     }
-
 
 }
 

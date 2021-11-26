@@ -2,8 +2,9 @@ import React from 'react'
 import Actor from './Actor'
 import Edit from './Edit'
 import v4 from "uuid/v4";
+import NewActor from "./NewActor";
 
-export default function AllActors({actors, showActorState, deleteActor, editActor}) {
+export default function AllActors({actors, showActorState, deleteActor, editActor, addNewActorState, addNewActor}) {
     return (
         <div id="table-wrapper">
             <div id="table-scroll" className={'style-8'}>
@@ -19,6 +20,9 @@ export default function AllActors({actors, showActorState, deleteActor, editActo
                     </tr>
                     </thead>
                     <tbody>
+                    {
+                        addNewActorState ? <NewActor key={0} addNewActor={addNewActor}/> : null
+                    }
                     {
                         showActorState.editActors ?
                             actors.map(actor => {

@@ -6,6 +6,8 @@ import Axios from 'axios';
 function Actors() {
     const [actors, setActors] = useState([])
     const [showActorState, setShowActorState] = useState({allActors: false, editActors: false, searchActors: false});
+    const [addNewActorState, setAddNewActorState] = useState(false);
+
 
     function handleShowAllActors(mode) {
         if (mode === 'allActors') {
@@ -72,6 +74,17 @@ function Actors() {
 
     }
 
+    function addNewActorToggle(){
+        setAddNewActorState(!addNewActorState)
+    }
+
+    function addNewActor(values){
+        Axios.post('http://localhost:3001/api/actors/add', {values})
+            .then(response => {
+                setActors(response.data)
+            });
+    }
+
     return (
         <div id="main">
             <h1 className="">Actors</h1>
@@ -88,15 +101,17 @@ function Actors() {
                     Search Actors
                 </button>
 
-                <button onClick={resetActors} className="btn btn-outline-danger p-3 m-3"
+                <button onClick={addNewActorToggle} className="btn btn-outline-info p-3 m-3"
                         style={{position: "relative", float: "right", marginRight: "20px"}}>
-                    Reset actors
+                    Add New Actors
                 </button>
             </div>
 
             <Search showState={showActorState.searchActors} search={search}/>
 
-            <AllActors actors={actors} deleteActor={deleteActor} editActor={editActor} showActorState={showActorState} />
+            <AllActors actors={actors} deleteActor={deleteActor} editActor={editActor} showActorState={showActorState}
+                       addNewActor={addNewActor} addNewActorState={addNewActorState}
+            />
         </div>
     );
 }
