@@ -168,8 +168,6 @@ class DAO {
     }
 
     async updateActorByID(actor_id, actor_age, name) {
-        console.log(actor_id, actor_age, name)
-
         const sql = `
             UPDATE person
             SET name = '${name}'
@@ -395,8 +393,9 @@ class DAO {
         const person_id = this.getLastPersonID();
 
         const sql_director = `
-        INSERT INTO actor (id, oscars)
-        VALUES           (${person_id}, ${oscars});`
+            INSERT INTO director (id, oscars)
+            VALUES           (${person_id}, ${oscars});
+            `
 
 
         try {
@@ -536,8 +535,8 @@ class DAO {
                    year        as release_date,
                    person.name as director
             FROM movie
-                     INNER JOIN studio ON movie.studio_id = studio.id
-                     INNER JOIN person ON movie.director_id = person.id
+                     LEFT JOIN studio ON movie.studio_id = studio.id
+                     LEFT JOIN person ON movie.director_id = person.id
             WHERE imdb_score IN (
                 SELECT max(imdb_score)
                 FROM movie
@@ -546,8 +545,6 @@ class DAO {
         `;
 
         let result = await db.pool.query(sql);
-
-        console.log(result)
 
         return result ?? {};
     }
@@ -560,7 +557,7 @@ class DAO {
                    studio.name          as studio
             FROM movie
                 LEFT JOIN cast ON movie.id = cast.movie_id
-                INNER JOIN studio ON movie.studio_id = studio.id
+                LEFT JOIN studio ON movie.studio_id = studio.id
             GROUP BY movie_id;
         `;
 
@@ -575,7 +572,7 @@ class DAO {
                    ROUND(AVG(imdb_score), 2) as avg_rating,
                    COUNT(movie.id)           as produced_movies
             FROM studio
-                INNER JOIN movie on studio.id = studio_id
+                LEFT JOIN movie on studio.id = studio_id
             GROUP BY studio.name
             ORDER BY produced_movies DESC;
         `;
