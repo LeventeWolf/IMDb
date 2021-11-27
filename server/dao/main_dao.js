@@ -262,31 +262,33 @@ class DAO {
     async addNewActor(name, age, title) {
         const movieId = await this.getMovieIDByTitle(title);
 
-        console.log("Adding new actor: " + name, age, title)
-
         const sql_person = `
-        INSERT INTO person (name)
-        VALUES           ('${name}');`
+            INSERT INTO person (name)
+            VALUES           ('${name}');
+        `
 
         try {
             await db.pool.query(sql_person);
+            console.log("DB (person) => INSERT INTO: " + name)
         } catch (e){
             console.log(e.message)
-            console.log("Insert into person failed!")
+            console.log("DB (person) => INSERT INTO FAILED! " + name)
             return -1
         }
 
         const person_id = await this.getLastPersonID();
 
         const sql_actor = `
-        INSERT INTO actor (id, age)
-        VALUES           (${person_id}, ${age});`
+            INSERT INTO actor (id, age)
+            VALUES           (${person_id}, ${age});
+            `
 
         try {
             await db.pool.query(sql_actor);
+            console.log("DB (actor) => INSERT INTO! " + name + " " + age)
         } catch (e) {
             console.log(e.message)
-            console.log("Insert into actor failed")
+            console.log("DB (actor) => INSERT INTO FAILED! " + name + " " + age)
             return -1;
         }
 
