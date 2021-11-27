@@ -2,8 +2,9 @@ import React from 'react'
 import Studio from './Studio'
 import Edit from './Edit'
 import v4 from "uuid/v4";
+import NewStudio from "../studios/NewStudio";
 
-export default function AllStudios({studios, showState, deleteStudio, editStudio}) {
+export default function AllStudios({studios, showState, deleteStudio, editStudio, addNewStudioState, addNewStudio}) {
     return (
         <div id="table-wrapper">
             <div id="table-scroll" className={'style-8'}>
@@ -19,6 +20,10 @@ export default function AllStudios({studios, showState, deleteStudio, editStudio
                     </tr>
                     </thead>
                     <tbody>
+                    {
+                        addNewStudioState ? <NewStudio key={0} addNewStudio={addNewStudio}/> : null
+                    }
+                    
                     {
                         showState.editStudios ?
                             studios.map(studio => {

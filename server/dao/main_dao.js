@@ -414,7 +414,7 @@ class DAO {
         const rows = await db.pool.query(`
             SELECT studio.id, location, name, movie.title as movieTitle
             FROM studio
-                     INNER JOIN movie ON studio.id = studio_id
+                     LEFT JOIN movie ON studio.id = studio_id
             ORDER BY name
             ;
         `);
@@ -459,11 +459,18 @@ class DAO {
     }
 
     async addNewStudio(name, location, title) {
-        const movieId = await this.getMovieIDByTitle(title);
-
         const sql = `
-        INSERT INTO person (name)
-        VALUES           ('${name}');`
+            INSERT INTO studio (name, location)
+            VALUES('${name}', '${location}')
+        `;
+
+        const studioID = await this.latestStudioID();
+
+        const sql2 = `
+            UPDATE movie
+            SET studio_id = ${studioID}
+            WHERE movie.title = '${title}';
+        `;
 
         try {
             await db.pool.query(sql);
@@ -472,6 +479,30 @@ class DAO {
             console.log('DB (studio) => INSERT INTO FAILED')
             throw e;
         }
+
+        try {
+            await db.pool.query(sql2);
+            console.log('DB (movie) => UPDATE: ' + title + " " + studioID)
+        } catch (e) {
+            console.log('DB (movie) => UPDATE FAILED: ' + title + " " + studioID)
+            throw e;
+        }
+    }
+
+    async latestStudioID(){
+        const sql = `
+            SELECT id
+            FROM studio;
+        `
+
+        const result = await db.pool.query(sql);
+
+        let len = 0;
+        for (const row of result) len++;
+
+        const studioID = result.splice(0)[len - 1].id
+
+        return studioID ?? -1;
     }
 
 

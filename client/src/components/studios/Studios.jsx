@@ -6,18 +6,27 @@ import Axios from 'axios';
 function Studios() {
     const [studios, setStudios] = useState([])
     const [showState, setShowState] = useState({allStudios: false, editStudios: false, searchStudios: false});
+    const [addNewStudioState, setAddNewStudioState] = useState(false);
 
     function handleShowAllStudios(mode) {
         if (mode === 'allStudios') {
             setShowState(() => {
                 return {allStudios: true, editStudios: false, searchStudios: false}
             });
+
+            const addNewMovieButton = document.getElementById('addNewStudioButton')
+            addNewMovieButton.classList.add('d-none')
+            setAddNewStudioState(false)
         }
 
         if (mode === 'editStudios') {
             setShowState(() => {
                 return {allStudios: false, editStudios: true, searchStudios: false}
             });
+
+            const addNewMovieButton = document.getElementById('addNewStudioButton')
+            addNewMovieButton.classList.remove('d-none')
+            setAddNewStudioState(false)
         }
 
         Axios.post('http://localhost:3001/api/studios')
@@ -60,6 +69,21 @@ function Studios() {
             return {allStudios: true, editStudios: false, searchStudios: !showState.searchStudios}
         });
 
+        const addNewMovieButton = document.getElementById('addNewStudioButton')
+        addNewMovieButton.classList.add('d-none')
+        setAddNewStudioState(false)
+    }
+
+    function addNewStudioToggle() {
+        setAddNewStudioState(!addNewStudioState)
+    }
+
+    function addNewStudio(values){
+        Axios.post('http://localhost:3001/api/studios/add', {values})
+            .then(response => {
+                setStudios(response.data)
+            });
+
     }
 
     function search(){
@@ -89,15 +113,16 @@ function Studios() {
                     Search Studios
                 </button>
 
-                <button onClick={resetStudios} className="btn btn-outline-danger p-3 m-3"
+                <button id={'addNewStudioButton'} onClick={addNewStudioToggle} className="d-none btn btn-outline-info p-3 m-3"
                         style={{position: "relative", float: "right", marginRight: "20px"}}>
-                    Reset Studios
+                    Add New Studio
                 </button>
             </div>
 
             <Search showState={showState.searchStudios} search={search}/>
 
-            <AllStudios studios={studios} deleteStudio={deleteStudio} editStudio={editStudio} showState={showState} />
+            <AllStudios studios={studios} deleteStudio={deleteStudio} editStudio={editStudio} showState={showState}
+                        addNewStudio={addNewStudio} addNewStudioState={addNewStudioState} />
         </div>
     );
 }

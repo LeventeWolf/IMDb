@@ -213,6 +213,17 @@ router.post("/api/studios/delete", async (req, res) => {
     return res.status(200).send(allStudios);
 });
 
+router.post("/api/studios/add", async (req, res) => {
+    const name = req.body.values.name;
+    const location = req.body.values.location;
+    const title = req.body.values.title;
+
+    await DAO.addNewStudio(name, location, title);
+
+    const allStudio = await DAO.getAllStudios();
+    return res.status(200).send(allStudio);
+});
+
 
 // Nested Queries
 
