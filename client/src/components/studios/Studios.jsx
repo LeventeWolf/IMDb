@@ -109,9 +109,9 @@ function Studios() {
                 <button onClick={() => handleShowAllStudios('editStudios')} className="btn btn-outline-info p-3 m-3">
                     Edit Studios
                 </button>
-                <button onClick={() => handleShowSearch()} className="btn btn-outline-info p-3 m-3">
-                    Search Studios
-                </button>
+                {/*<button onClick={() => handleShowSearch()} className="btn btn-outline-info p-3 m-3">*/}
+                {/*    Search Studios*/}
+                {/*</button>*/}
 
                 <button id={'addNewStudioButton'} onClick={addNewStudioToggle} className="d-none btn btn-outline-info p-3 m-3"
                         style={{position: "relative", float: "right", marginRight: "20px"}}>
