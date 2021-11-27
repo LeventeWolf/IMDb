@@ -175,6 +175,17 @@ router.post("/api/directors/search", async (req, res) => {
     return res.status(200).send(foundMovies);
 });
 
+router.post("/api/directors/add", async (req, res) => {
+    const name = req.body.values.name;
+    const oscars = req.body.values.oscars;
+    const title = req.body.values.title;
+
+    await DAO.addNewDirector(name, oscars, title);
+
+    const allDirector = await DAO.getAllDirectors();
+    return res.status(200).send(allDirector);
+});
+
 
 // Studios
 

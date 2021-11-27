@@ -1,8 +1,9 @@
 import React from 'react'
 import Director from './Director'
 import Edit from './Edit'
+import NewDirector from "../directors/NewDirector";
 
-export default function AllDirectors({directors, showState, deleteDirector, editDirector}) {
+export default function AllDirectors({directors, showState, deleteDirector, editDirector, addNewDirectorSate, addNewDirector}) {
     return (
         <div id="table-wrapper">
             <div id="table-scroll" className={'style-8'}>
@@ -18,6 +19,9 @@ export default function AllDirectors({directors, showState, deleteDirector, edit
                     </tr>
                     </thead>
                     <tbody>
+                    {
+                        addNewDirectorSate ? <NewDirector key={0} addNewDirector={addNewDirector}/> : null
+                    }
                     {
                         showState.editDirectors ?
                             directors.map(director => {

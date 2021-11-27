@@ -151,6 +151,7 @@ class DAO {
         return result.splice(0)[0].id ?? -1;
     }
 
+
     // Actor
     async getAllActors() {
         const rows = await db.pool.query(`
@@ -310,7 +311,6 @@ class DAO {
         }
     }
 
-
     async getLastActorID() {
         const sql = `
             SELECT id
@@ -327,13 +327,14 @@ class DAO {
         return actorID ?? -1;
     }
 
+
     // Director
     async getAllDirectors() {
         const rows = await db.pool.query(`
             SELECT person.id, person.name, movie.title, director.oscars as oscars, movie.title as movieTitle
             FROM person
                      INNER JOIN director on person.id = director.id
-                     INNER JOIN movie on director.id = movie.director_id
+                     LEFT JOIN movie on director.id = movie.director_id
             GROUP BY person.name
             ORDER BY person.name;
         `);
@@ -384,29 +385,51 @@ class DAO {
     }
 
     async addNewDirector(name, oscars, title) {
-        const movieId = await this.getMovieIDByTitle(title);
+        // const movieId = await this.getMovieIDByTitle(title);
 
         const sql_person = `
-        INSERT INTO person (name)
-        VALUES           ('${name}');`
+            INSERT INTO person (name)
+            VALUES           ('${name}');
+        `
 
-        const person_id = this.getLastPersonID();
+        try {
+            await db.pool.query(sql_person);
+            console.log('DB (person) => INSERT INTO: ' + name)
+        } catch (e) {
+            console.log(e.message)
+            console.log('DB (person) => INSERT INTO FAILED: ' + name)
+        }
+
+        const person_id = await this.getLastPersonID();
+
+        const sql_movie = `
+            UPDATE movie
+            SET director_id = '${person_id}'
+            where movie.title = '${title}'
+        `;
+
+        try {
+            await db.pool.query(sql_movie);
+            console.log('DB (movie) => UPDATE DIRECTOR: ' + name + " " + title)
+        } catch (e) {
+            console.log('DB (movie) => UPDATE DIRECTOR FAILED: ' + name + " " + title)
+            throw e;
+        }
 
         const sql_director = `
             INSERT INTO director (id, oscars)
             VALUES           (${person_id}, ${oscars});
             `
-
-
         try {
-            await db.pool.query(sql);
-            console.log('DB (actor) => INSERT INTO: ' + name + " " + title)
+            await db.pool.query(sql_director);
+            console.log('DB (director) => INSERT INTO: ' + name + " " + title)
         } catch (e) {
-            console.log('DB (movie) => INSERT INTO FAILED')
-            throw e;
+            console.log(e.message);
+            console.log('DB (sql_director) => INSERT INTO FAILED')
         }
-    }
 
+
+    }
 
 
     // Studio

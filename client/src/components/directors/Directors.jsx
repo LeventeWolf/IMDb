@@ -6,18 +6,27 @@ import Axios from 'axios';
 function Directors() {
     const [directors, setDirectors] = useState([])
     const [showState, setShowState] = useState({allDirectors: false, editDirectors: false, searchDirectors: false});
+    const [addNewDirectorState, setAddNewDirectorState] = useState(false);
 
     function handleShowAllDirectors(mode) {
         if (mode === 'allDirectors') {
             setShowState(() => {
                 return {allDirectors: true, editDirectors: false, searchDirectors: false}
             });
+
+            const addNewMovieButton = document.getElementById('addNewDirectorButton')
+            addNewMovieButton.classList.add('d-none')
+            setAddNewDirectorState(false)
         }
 
         if (mode === 'editDirectors') {
             setShowState(() => {
                 return {allDirectors: false, editDirectors: true, searchDirectors: false}
             });
+
+            const addNewMovieButton = document.getElementById('addNewDirectorButton')
+            addNewMovieButton.classList.remove('d-none')
+            setAddNewDirectorState(false)
         }
 
         Axios.post('http://localhost:3001/api/directors')
@@ -30,8 +39,8 @@ function Directors() {
         Axios.post('http://localhost:3001/api/directors/delete', {directorID: id});
 
         setDirectors(prevState => {
-            return prevState.filter(movie => {
-                return movie.id !== id
+            return prevState.filter(director => {
+                return director.id !== id
             })
         })
     }
@@ -59,6 +68,17 @@ function Directors() {
         setShowState(() => {
             return {allDirectors: true, editDirectors: false, searchDirectors: !showState.searchDirectors}
         });
+    }
+
+    function addNewDirectorToggle() {
+        setAddNewDirectorState(!addNewDirectorState)
+    }
+
+    function addNewDirector(values){
+        Axios.post('http://localhost:3001/api/directors/add', {values})
+            .then(response => {
+                setDirectors(response.data)
+            });
 
     }
 
@@ -85,19 +105,17 @@ function Directors() {
                 <button onClick={() => handleShowAllDirectors('editDirectors')} className="btn btn-outline-info p-3 m-3">
                     Edit Directors
                 </button>
-                <button onClick={() => handleShowSearch()} className="btn btn-outline-info p-3 m-3">
-                    Search Directors
-                </button>
 
-                <button onClick={resetDirectors} className="btn btn-outline-danger p-3 m-3"
+                <button id={'addNewDirectorButton'} onClick={addNewDirectorToggle} className="d-none btn btn-outline-info p-3 m-3"
                         style={{position: "relative", float: "right", marginRight: "20px"}}>
-                    Reset Directors
+                    Add New Director
                 </button>
             </div>
 
             <Search showState={showState.searchDirectors} search={search}/>
 
-            <AllDirectors directors={directors} deleteDirector={deleteDirector} editDirector={editDirector} showState={showState} />
+            <AllDirectors directors={directors} deleteDirector={deleteDirector} editDirector={editDirector} showState={showState}
+                          addNewDirector={addNewDirector} addNewDirectorSate={addNewDirectorState} />
         </div>
     );
 }
